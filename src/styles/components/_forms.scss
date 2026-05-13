@@ -1,0 +1,25 @@
+@use '../abstracts' as *;
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    .form-label {
+        font-size: 1rem;
+        font-weight: 500;
+        color: var(--text-light);
+        line-height: 100%;
+        margin: 0;
+    }
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+
+    @media (max-width: 768px) {
+        grid-template-columns: 1fr;
+    }
+}
