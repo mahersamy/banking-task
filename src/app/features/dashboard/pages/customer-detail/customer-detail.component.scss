@@ -1,0 +1,226 @@
+.spinner-ring {
+  width: 36px;
+  height: 36px;
+  border: 3px solid rgba(99, 102, 241, 0.15);
+  border-top-color: #6366f1;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.btn-back {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4rem 0.9rem;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px;
+  color: rgba(255,255,255,0.55);
+  font-size: 0.78rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background: rgba(99, 102, 241, 0.12);
+    border-color: rgba(99, 102, 241, 0.3);
+    color: #a5b4fc;
+  }
+}
+
+.error-state {
+  color: rgba(255,255,255,0.4);
+  i { color: #f87171; }
+}
+
+.detail-panel {
+  background: #12151f;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+  height: 100%;
+}
+
+.fade-in {
+  animation: fadeInUp 0.25s ease-out;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+// Header
+.detail-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.07), transparent);
+}
+
+.detail-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 1.3rem;
+  color: #fff;
+  flex-shrink: 0;
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.3);
+}
+
+.customer-fullname {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin: 0;
+}
+
+.cif-badge {
+  font-size: 0.68rem;
+  color: rgba(255,255,255,0.35);
+  background: rgba(255,255,255,0.06);
+  padding: 0.15rem 0.5rem;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+.close-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.04);
+  color: rgba(255,255,255,0.45);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+
+  &:hover {
+    background: rgba(239,68,68,0.15);
+    color: #ef4444;
+    border-color: rgba(239,68,68,0.3);
+  }
+}
+
+// Info Grid
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: rgba(255,255,255,0.04);
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+.info-item {
+  padding: 1rem 1.5rem;
+  background: #12151f;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  .info-label {
+    font-size: 0.68rem;
+    color: rgba(255,255,255,0.3);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    i { font-size: 0.6rem; }
+  }
+
+  .info-value {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #e2e8f0;
+  }
+}
+
+// Accounts Section
+.accounts-section {
+  padding: 1.25rem 1.5rem;
+  max-height: calc(100vh - 420px);
+  overflow-y: auto;
+
+  &::-webkit-scrollbar { width: 4px; }
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.08);
+    border-radius: 2px;
+  }
+}
+
+.section-header {
+  margin-bottom: 1rem;
+
+  .section-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin: 0;
+  }
+
+  .accounts-count {
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.25);
+    background: rgba(255,255,255,0.05);
+    padding: 0.15rem 0.6rem;
+    border-radius: 20px;
+  }
+}
+
+.accounts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+// Empty State
+.empty-detail {
+  background: #12151f;
+  border-radius: 16px;
+  border: 1px dashed rgba(255,255,255,0.08);
+  height: 100%;
+  min-height: 400px;
+  text-align: center;
+  padding: 3rem;
+}
+
+.empty-icon-ring {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: rgba(99, 102, 241, 0.08);
+  border: 1px solid rgba(99, 102, 241, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.25rem;
+  font-size: 1.75rem;
+  color: #6366f1;
+}
+
+.empty-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #e2e8f0;
+  margin-bottom: 0.5rem;
+}
+
+.empty-desc {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.3);
+  max-width: 240px;
+  margin: 0 auto;
+  line-height: 1.6;
+}

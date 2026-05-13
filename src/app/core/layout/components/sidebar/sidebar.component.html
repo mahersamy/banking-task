@@ -1,0 +1,35 @@
+<aside class="layout-sidebar">
+  <!-- Logo / Brand -->
+  <div class="sidebar-brand">
+    <div class="brand-icon">
+      <i class="fa-solid fa-shield-halved"></i>
+    </div>
+    <div class="brand-text">
+      <span class="brand-name">Antigravity</span>
+      <span class="brand-subtitle">Banking Portal</span>
+    </div>
+  </div>
+
+  <!-- Navigation Label -->
+  <p class="nav-section-label">MAIN MENU</p>
+
+  <!-- Navigation Items -->
+  <nav class="sidebar-nav">
+    @for (item of navItems; track item.label) {
+      <a
+        [routerLink]="item.routerLink"
+        routerLinkActive="active"
+        class="nav-item">
+        <span class="nav-icon">
+          <i [class]="item.icon"></i>
+        </span>
+        <span class="nav-label">{{ item.label }}</span>
+      </a>
+    }
+  </nav>
+
+  <!-- Bottom Version Badge -->
+  <div class="sidebar-footer">
+    <span class="version-badge">v1.0.0</span>
+  </div>
+</aside>

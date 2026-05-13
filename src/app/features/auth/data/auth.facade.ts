@@ -29,7 +29,7 @@ export class AuthFacade {
         next: (res: LoginResponseDto) => {
           this.state.setAuthenticated(true);
           localStorage.setItem(LOCALSTORAGE_ROUTE.AUTH_TOKEN, res.token)
-          this.router.navigate(['/']);
+          this.router.navigate(['/dashboard']);
         },
         error: (error) => {
           this.state.setError(error.message);

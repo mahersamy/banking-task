@@ -1,0 +1,38 @@
+.layout-wrapper {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  background: #0c0e1a;
+}
+
+.layout-main-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+  background: #0f1117;
+}
+
+.layout-main {
+  flex: 1;
+  overflow-y: auto;
+  padding: 2rem;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.18);
+    }
+  }
+}

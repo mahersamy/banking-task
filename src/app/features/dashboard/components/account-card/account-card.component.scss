@@ -1,0 +1,85 @@
+.account-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  transition: all 0.2s;
+
+  &:hover {
+    background: rgba(99, 102, 241, 0.06);
+    border-color: rgba(99, 102, 241, 0.2);
+    transform: translateY(-2px);
+  }
+}
+
+.account-id {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #e2e8f0;
+}
+
+.account-iban {
+  font-size: 0.68rem;
+  color: rgba(255, 255, 255, 0.3);
+  font-family: 'Courier New', monospace;
+  margin-top: 2px;
+}
+
+.type-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.2rem 0.65rem;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border: 1px solid transparent;
+
+  &.type-current {
+    background: rgba(59, 130, 246, 0.12);
+    color: #60a5fa;
+    border-color: rgba(59, 130, 246, 0.22);
+  }
+  &.type-savings {
+    background: rgba(16, 185, 129, 0.12);
+    color: #34d399;
+    border-color: rgba(16, 185, 129, 0.22);
+  }
+  &.type-credit {
+    background: rgba(239, 68, 68, 0.12);
+    color: #f87171;
+    border-color: rgba(239, 68, 68, 0.22);
+  }
+}
+
+.account-balance {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+
+  .balance-currency {
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.35);
+    font-weight: 600;
+  }
+
+  .balance-amount {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #f1f5f9;
+    letter-spacing: -0.02em;
+  }
+}
+
+.status-dot {
+  font-size: 0.68rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+  i { font-size: 0.45rem; }
+
+  &.status-active { color: #34d399; }
+  &.status-dormant { color: #fbbf24; }
+  &.status-closed  { color: #f87171; }
+}

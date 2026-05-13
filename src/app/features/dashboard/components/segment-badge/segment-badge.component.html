@@ -1,0 +1,5 @@
+<span class="segment-badge" 
+      [class.priority]="segment()?.toLowerCase() === 'priority'" 
+      [class.retail]="segment()?.toLowerCase() === 'retail'">
+  {{ segment() }}
+</span>

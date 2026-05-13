@@ -1,0 +1,24 @@
+.segment-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.2rem 0.6rem;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.priority {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399 !important;
+  border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+.retail {
+  background: rgba(59, 130, 246, 0.15);
+  color: #60a5fa !important;
+  border: 1px solid rgba(59, 130, 246, 0.25);
+}

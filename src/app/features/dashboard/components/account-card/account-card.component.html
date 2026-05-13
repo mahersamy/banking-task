@@ -1,0 +1,22 @@
+@if (account()) {
+  <div class="account-card">
+    <div class="d-flex justify-content-between align-items-start">
+      <div>
+        <div class="account-id">{{ account()?.id }}</div>
+        <div class="account-iban">{{ account()?.iban }}</div>
+      </div>
+      <span class="type-badge" [ngClass]="'type-' + account()?.type?.toLowerCase()">
+        {{ account()?.type }}
+      </span>
+    </div>
+    <div class="d-flex justify-content-between align-items-center mt-3">
+      <div class="account-balance">
+        <span class="balance-currency">{{ account()?.currency }}</span>
+        <span class="balance-amount">{{ account()?.balance | number:'1.2-2' }}</span>
+      </div>
+      <span class="status-dot" [ngClass]="'status-' + account()?.status?.toLowerCase()">
+        <i class="fa-solid fa-circle"></i>{{ account()?.status }}
+      </span>
+    </div>
+  </div>
+}
