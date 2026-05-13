@@ -1,0 +1,60 @@
+<div class="login-container">
+  <div class="background-blobs">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+  </div>
+
+  <p-card styleClass="login-card shadow-2xl">
+    <div class="login-header">
+      <div class="logo">
+        <i class="fa-solid fa-shield text-4xl text-primary mb-3"></i>
+        <h1 class="text-3xl font-bold tracking-tight">Antigravity Bank</h1>
+        <p class="text-secondary text-sm">Secure Banking Portal</p>
+      </div>
+    </div>
+
+    @if (authState.error()) {
+      <p-message [life]="3000" severity="error">{{ authState.error() }}</p-message>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="login()" class="login-form mt-4">
+      <div class="field mb-4">
+        <label for="email" class="block font-semibold mb-2">Email Address</label>
+        <p-iconfield>
+          <p-inputicon class="fa-solid fa-envelope" />
+          <input
+            pInputText
+            id="email"
+            formControlName="email"
+            type="email"
+            placeholder="name@example.com"
+            class="w-full"
+            [fluid]="true"
+          />
+        </p-iconfield>
+        <app-field-error [control]="form.controls.email"></app-field-error>
+      </div>
+
+      <div class="field mb-5">
+        <label for="password" class="block font-semibold mb-2">Password</label>
+        <p-password
+          id="password"
+          formControlName="password"
+          [toggleMask]="true"
+          [feedback]="false"
+          placeholder="••••••••"
+          inputStyleClass="w-full"
+          [fluid]="true"
+        >
+        </p-password>
+        <app-field-error [control]="form.controls.password"></app-field-error>
+      </div>
+
+      <div class="flex flex-column gap-3 mt-2">
+        <button type="submit" class="btn-primary w-100" [disabled]="form.invalid || authState.isLoading()" [appLoading]="authState.isLoading()">
+          <span>Sign In</span>
+        </button>
+      </div>
+    </form>
+  </p-card>
+</div>
