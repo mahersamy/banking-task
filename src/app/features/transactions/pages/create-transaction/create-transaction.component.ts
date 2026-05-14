@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TransactionsFacade } from '../../data/transactions.facade';
 import { DashboardFacade } from '../../../dashboard/data/dashboard.facade';
 import { FieldErrorComponent } from '../../../../shared/components/field-error/field-error.component';
@@ -48,6 +48,7 @@ export class CreateTransactionComponent implements OnInit {
   readonly dashboard = inject(DashboardFacade);
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
 
 
   readonly today = new Date();
@@ -73,6 +74,14 @@ export class CreateTransactionComponent implements OnInit {
   ngOnInit(): void {
     this.facade.loadAll(); // ensure categories loaded
 
+    // Re-hydrate state from Query Params on refresh
+    this.route.queryParamMap.subscribe(params => {
+      const cif = params.get('id');
+      const accId = params.get('accountId');
+      if (cif) this.dashboard.loadCustomerDetail(cif);
+      if (accId) this.dashboard.selectAccount(accId);
+    });
+
     // Re-run amount validators when type changes (Debit/Credit affects exceedsBalance)
     this.form.controls.type.valueChanges.subscribe(() => {
       this.form.controls.amount.updateValueAndValidity();
@@ -85,10 +94,16 @@ export class CreateTransactionComponent implements OnInit {
       return;
     }
     this.facade.createTransaction(this.form.getRawValue() as unknown as CreateTransactionDto);
-    this.router.navigate(['/transactions']); // back to transactions list
+    this.cancel(); // Use shared back logic
   }
 
   cancel(): void {
-    this.router.navigate(['/transactions']);
+    const cif = this.route.snapshot.queryParamMap.get('id');
+    const accId = this.route.snapshot.queryParamMap.get('accountId');
+    if (cif && accId) {
+      this.router.navigate(['/transactions'], { queryParams: { id: cif, accountId: accId } });
+    } else {
+      this.router.navigate(['/dashboard']);
+    }
   }
 }

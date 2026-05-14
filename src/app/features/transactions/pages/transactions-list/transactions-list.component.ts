@@ -2,6 +2,7 @@ import { Component, computed, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
+import { DashboardFacade } from '../../../dashboard/data/dashboard.facade';
 import { TransactionsFacade } from '../../data/transactions.facade';
 import { SortField, SortDirection } from '../../data/models/transaction.model';
 
@@ -30,9 +31,10 @@ import { ButtonModule } from 'primeng/button';
 })
 export class TransactionsListComponent implements OnInit {
   readonly facade = inject(TransactionsFacade);
+  readonly dashboard = inject(DashboardFacade);
   private readonly fb = inject(FormBuilder);
-  private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
 
   filterForm = this.fb.group({
     dateFrom: [null],
@@ -43,10 +45,18 @@ export class TransactionsListComponent implements OnInit {
 
   ngOnInit(): void {
     this.facade.loadAll();
+
+    // Re-hydrate state from Query Params on refresh
+    this.route.queryParamMap.subscribe(params => {
+      const cif = params.get('id');
+      const accId = params.get('accountId');
+      if (cif) this.dashboard.loadCustomerDetail(cif);
+      if (accId) this.dashboard.selectAccount(accId);
+    });
   }
 
   goBack(): void {
-    const customerId = this.route.snapshot.paramMap.get('id');
+    const customerId = this.route.snapshot.queryParamMap.get('id');
     if (customerId) {
       this.router.navigate(['/dashboard/customers', customerId]);
     } else {
