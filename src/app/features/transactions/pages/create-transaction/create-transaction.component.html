@@ -1,0 +1,122 @@
+<div class="create-page">
+  <div class="page-header">
+    <button class="btn-back" (click)="cancel()">
+      <i class="pi pi-arrow-left"></i>
+    </button>
+    <div>
+      <h2 class="page-title">New Transaction</h2>
+      <p class="page-subtitle">Fill in the details below</p>
+    </div>
+  </div>
+
+  <p-card styleClass="form-card">
+    <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      <div class="form-grid">
+        <!-- Transaction Type -->
+        <div class="field">
+          <label>Transaction Type <span class="req">*</span></label>
+          <p-selectbutton
+            formControlName="type"
+            [options]="[
+              { label: 'Debit', value: 'Debit' },
+              { label: 'Credit', value: 'Credit' },
+            ]"
+            optionLabel="label"
+            optionValue="value"
+            styleClass="type-toggle"
+          />
+          <app-field-error [control]="form.controls.type" />
+        </div>
+
+        <!-- Amount -->
+        <div class="field">
+          <label>Amount <span class="req">*</span></label>
+          <p-iconfield>
+            <p-inputicon styleClass="pi pi-egyptian-pound" />
+            <p-inputnumber
+              formControlName="amount"
+              [minFractionDigits]="2"
+              [maxFractionDigits]="2"
+              placeholder="0.00"
+              [fluid]="true"
+              inputStyleClass="dark-input w-full"
+            />
+          </p-iconfield>
+          <app-field-error
+            [control]="form.controls.amount"
+            [messages]="{
+              min: 'Amount must be greater than 0.',
+              max: 'Amount cannot exceed 100,000.',
+              maxDecimals: 'Maximum 2 decimal places allowed.',
+              exceedsBalance: 'Amount exceeds available account balance.',
+            }"
+          />
+        </div>
+
+        <!-- Date -->
+        <div class="field">
+          <label>Date <span class="req">*</span></label>
+          <p-datepicker
+            formControlName="date"
+            dateFormat="yy-mm-dd"
+            [showIcon]="true"
+            [maxDate]="today"
+            placeholder="Select date"
+            [fluid]="true"
+            styleClass="dark-input w-full"
+          />
+          <app-field-error
+            [control]="form.controls.date"
+            [messages]="{ futureDate: 'Date must not be in the future.' }"
+          />
+        </div>
+
+        <!-- Merchant -->
+        <div class="field">
+          <label>Merchant <span class="req">*</span></label>
+          <p-iconfield>
+            <p-inputicon styleClass="pi pi-building" />
+            <input
+              pInputText
+              formControlName="merchant"
+              placeholder="e.g. Carrefour"
+              [fluid]="true"
+              class="dark-input w-full"
+            />
+          </p-iconfield>
+          <app-field-error [control]="form.controls.merchant" />
+        </div>
+
+        <!-- Category -->
+        <div class="field">
+          <label>Category <span class="req">*</span></label>
+          <p-select
+            formControlName="category"
+            [options]="facade.categories()"
+            placeholder="Select category"
+            [fluid]="true"
+            styleClass="dark-input w-full"
+          />
+          <app-field-error [control]="form.controls.category" />
+        </div>
+      </div>
+
+      <!-- Balance hint -->
+      @if (dashboard.selectedAccount(); as acc) {
+        <div class="balance-hint">
+          <i class="pi pi-wallet"></i>
+          Available balance:
+          <strong>{{ acc.balance | number: '1.2-2' }} {{ acc.currency }}</strong>
+        </div>
+      }
+
+      <!-- Actions -->
+      <div class="form-actions">
+        <button pButton type="button" (click)="cancel()" severity="secondary">Cancel</button>
+        <button pButton type="submit" class="btn-submit">
+          <i class="pi pi-check"></i> Create Transaction
+        </button>
+      </div>
+    </form>
+  </p-card>
+</div>

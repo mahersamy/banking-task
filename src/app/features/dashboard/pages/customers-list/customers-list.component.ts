@@ -21,6 +21,6 @@ export class CustomersListComponent implements OnInit {
   }
 
   onSelectCustomer(customer: Customer): void {
-    this.router.navigate(['/dashboard/customer', customer.CIF]);
+    this.router.navigate(['/dashboard/customers', customer.CIF]);
   }
 }

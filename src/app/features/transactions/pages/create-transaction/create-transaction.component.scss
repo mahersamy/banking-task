@@ -1,0 +1,156 @@
+$surface:     #12151f;
+$border:      rgba(255, 255, 255, 0.06);
+$text-primary:#f1f5f9;
+$text-muted:  rgba(255, 255, 255, 0.35);
+$indigo:      #6366f1;
+$indigo-soft: rgba(99, 102, 241, 0.1);
+
+// ── Page layout ───────────────────────────────────────────
+.create-page {
+  padding: 1.5rem;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 1.25rem;
+
+  .page-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: $text-primary;
+    margin: 0 0 2px;
+  }
+
+  .page-subtitle {
+    font-size: 0.75rem;
+    color: $text-muted;
+  }
+}
+
+// ── Back button ───────────────────────────────────────────
+.btn-back {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid rgba(99, 102, 241, 0.5);
+  background: $indigo-soft;
+  color: #818cf8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.2s;
+
+  &:hover {
+    background: rgba(99, 102, 241, 0.2);
+    color: #a5b4fc;
+  }
+}
+
+// ── Form card ─────────────────────────────────────────────
+:host ::ng-deep .form-card {
+  background: $surface !important;
+  border: 1px solid $border !important;
+  border-radius: 14px !important;
+
+  .p-card-body {
+    padding: 1.5rem 2rem;
+  }
+}
+
+// ── Form grid ─────────────────────────────────────────────
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// ── Field ─────────────────────────────────────────────────
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  label {
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: #cbd5e1;
+
+    .req {
+      color: #f87171;
+      margin-left: 2px;
+    }
+  }
+}
+
+// ── Type toggle ───────────────────────────────────────────
+:host ::ng-deep .type-toggle {
+  .p-togglebutton {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 255, 255, 0.08);
+    color: $text-muted;
+    font-size: 0.82rem;
+    font-weight: 600;
+    transition: all 0.2s;
+
+    &.p-highlight {
+      background: $indigo-soft;
+      border-color: rgba(99, 102, 241, 0.4);
+      color: #a5b4fc;
+    }
+  }
+}
+
+// ── Balance hint ──────────────────────────────────────────
+.balance-hint {
+  margin-top: 1.25rem;
+  padding: 10px 14px;
+  background: rgba(99, 102, 241, 0.08);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  border-radius: 10px;
+  font-size: 0.8rem;
+  color: #818cf8;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  strong {
+    color: #a5b4fc;
+  }
+
+  .pi {
+    font-size: 1rem;
+  }
+}
+
+// ── Form actions ──────────────────────────────────────────
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid $border;
+
+  .btn-submit {
+    background: $indigo !important;
+    border: none !important;
+    border-radius: 10px !important;
+    padding: 0 20px !important;
+    font-weight: 600 !important;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    &:hover {
+      background: rgba(99, 102, 241, 0.85) !important;
+    }
+  }
+}

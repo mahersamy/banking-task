@@ -29,7 +29,6 @@ export class LoadingDirective {
     this.renderer.addClass(this.el.nativeElement, 'pointer-events-none');
     this.renderer.addClass(this.el.nativeElement, 'opacity-70');
 
-    // Create the PrimeNG spinner icon element
     this.spinnerElement = this.renderer.createElement('i');
     this.renderer.addClass(this.spinnerElement, 'fa-solid');
     this.renderer.addClass(this.spinnerElement, 'fa-spinner');
@@ -41,8 +40,7 @@ export class LoadingDirective {
   }
 
   private removeSpinner() {
-    // Re-enable the element
-    this.renderer.setProperty(this.el.nativeElement, 'disabled', false);
+    // Remove the visual cues added during loading
     this.renderer.removeClass(this.el.nativeElement, 'pointer-events-none');
     this.renderer.removeClass(this.el.nativeElement, 'opacity-70');
 

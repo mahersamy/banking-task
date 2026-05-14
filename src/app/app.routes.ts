@@ -20,7 +20,11 @@ export const routes: Routes = [
         path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full'
-      }
+      },
+      {
+        path: 'transactions',
+        loadChildren: () => import('./features/transactions/transactions.routes').then(m => m.transactionsRoutes)
+      },
     ]
   },
   {

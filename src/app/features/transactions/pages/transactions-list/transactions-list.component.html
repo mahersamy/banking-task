@@ -1,0 +1,141 @@
+<div class="transactions-page">
+
+  <!-- Header -->
+  <div class="page-header">
+    <div class="header-left">
+      <button class="btn-back" (click)="goBack()">
+        <i class="fa-solid fa-arrow-left"></i>
+      </button>
+      <div>
+        <h2 class="page-title">Transactions</h2>
+        <p class="page-subtitle">{{ facade.transactions().length }} records found</p>
+      </div>
+    </div>
+    <button class="btn-add" routerLink="new">
+      <i class="fa-solid fa-plus"></i> New Transaction
+    </button>
+  </div>
+
+  <!-- Filters -->
+  <p-card styleClass="filters-card">
+    <div class="filters-grid" [formGroup]="filterForm">
+
+      <div class="filter-field">
+        <label>From Date</label>
+        <p-datepicker formControlName="dateFrom"
+          dateFormat="yy-mm-dd"
+          [showIcon]="true"
+          placeholder="Start date"
+          styleClass="w-full dark-input" />
+      </div>
+
+      <div class="filter-field">
+        <label>To Date</label>
+        <p-datepicker formControlName="dateTo"
+          dateFormat="yy-mm-dd"
+          [showIcon]="true"
+          placeholder="End date"
+          styleClass="w-full dark-input" />
+      </div>
+
+      <div class="filter-field">
+        <label>Type</label>
+        <p-select formControlName="type"
+          [options]="[{ label: 'All Types', value: null }, { label: 'Debit', value: 'Debit' }, { label: 'Credit', value: 'Credit' }]"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="All Types"
+          styleClass="w-full dark-input" />
+      </div>
+
+      <div class="filter-field">
+        <label>Category</label>
+        <p-select formControlName="category"
+          [options]="categoryOptions()"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="All Categories"
+          styleClass="w-full dark-input" />
+      </div>
+
+      <div class="filter-actions">
+        <button pButton class="btn-apply" (click)="applyFilter()">Apply</button>
+        <button pButton class="btn-reset" (click)="resetFilter()" severity="secondary">Reset</button>
+      </div>
+
+    </div>
+  </p-card>
+
+  <!-- Loading -->
+  @if (facade.loading()) {
+    <div class="loading-state">
+      <div class="spinner-ring"></div>
+      <span>Loading transactions…</span>
+    </div>
+  }
+
+  <!-- Table -->
+  @if (!facade.loading()) {
+    <div class="table-card">
+      <p-table
+        [value]="facade.transactions()"
+        [paginator]="true"
+        [rows]="10"
+        [rowsPerPageOptions]="[10, 25, 50]"
+        styleClass="dark-table"
+        [tableStyle]="{ 'min-width': '100%' }">
+
+        <ng-template pTemplate="header">
+          <tr>
+            <th (click)="sort('date')" class="sortable-col">
+              Date
+              <i class="fa-solid"
+                [class.fa-sort-up]="facade.sortField() === 'date' && facade.sortDir() === 'asc'"
+                [class.fa-sort-down]="facade.sortField() === 'date' && facade.sortDir() === 'desc'"
+                [class.fa-sort]="facade.sortField() !== 'date'">
+              </i>
+            </th>
+            <th>Type</th>
+            <th (click)="sort('amount')" class="sortable-col">
+              Amount
+              <i class="fa-solid"
+                [class.fa-sort-up]="facade.sortField() === 'amount' && facade.sortDir() === 'asc'"
+                [class.fa-sort-down]="facade.sortField() === 'amount' && facade.sortDir() === 'desc'"
+                [class.fa-sort]="facade.sortField() !== 'amount'">
+              </i>
+            </th>
+            <th>Merchant</th>
+            <th>Category</th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-t>
+          <tr>
+            <td class="date-cell">{{ t.date }}</td>
+            <td>
+              <span class="type-badge" [class]="t.type.toLowerCase()">
+                {{ t.type }}
+              </span>
+            </td>
+            <td class="amount-cell" [class]="t.type.toLowerCase()">
+              {{ t.type === 'Debit' ? '−' : '+' }}{{ t.amount | number:'1.2-2' }}
+            </td>
+            <td class="merchant-cell">{{ t.merchant }}</td>
+            <td><span class="cat-badge">{{ t.category }}</span></td>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="5" class="empty-row">
+              <i class="fa-solid fa-inbox"></i>
+              <span>No transactions found</span>
+            </td>
+          </tr>
+        </ng-template>
+
+      </p-table>
+    </div>
+  }
+
+</div>

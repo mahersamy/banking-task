@@ -21,6 +21,6 @@ export class SidebarComponent {
       label: 'Dashboard',
       icon: 'fa-solid fa-chart-pie',
       routerLink: '/dashboard'
-    }
+    },
   ];
 }

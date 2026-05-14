@@ -1,5 +1,5 @@
 @if (account()) {
-  <div class="account-card">
+  <div class="account-card" (click)="viewTransactions()" style="cursor: pointer;">
     <div class="d-flex justify-content-between align-items-start">
       <div>
         <div class="account-id">{{ account()?.id }}</div>

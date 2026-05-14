@@ -1,0 +1,121 @@
+import { Injectable, inject, computed, signal, DestroyRef } from '@angular/core';
+import { forkJoin } from 'rxjs';
+import { finalize } from 'rxjs/operators';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { TransactionsApiService } from './transactions-api.service';
+import { TransactionsState } from './transactions.state';
+import { DashboardFacade } from '../../dashboard/data/dashboard.facade';
+import { CreateTransactionDto } from './dto/create-transaction.dto';
+import { Transaction, TransactionFilter, SortField, SortDirection } from './models/transaction.model';
+import { v4 as uuidv4 } from 'uuid';
+
+@Injectable({ providedIn: 'root' })
+export class TransactionsFacade {
+  private readonly api = inject(TransactionsApiService);
+  private readonly state = inject(TransactionsState);
+  private readonly dashboard = inject(DashboardFacade);
+  private readonly destroyRef = inject(DestroyRef);
+
+  readonly loading = this.state.loading;
+  readonly error = this.state.error;
+  readonly categories = this.state.categories;
+  readonly filter = this.state.filter;
+  readonly sortField = this.state.sortField;
+  readonly sortDir = this.state.sortDir;
+
+  // Transactions — filtered by account (if selected) + global filters + sorted
+  readonly transactions = computed(() => {
+    const accountId = this.dashboard.selectedAccount()?.id;
+    let list = this.state.all();
+
+    // Filter by account if one is selected (contextual view)
+    if (accountId) {
+      list = list.filter((t: Transaction) => t.accountId === accountId);
+    }
+
+    const f = this.state.filter();
+
+    // Filter
+    if (f.dateFrom) list = list.filter(t => t.date >= f.dateFrom!);
+    if (f.dateTo) list = list.filter(t => t.date <= f.dateTo!);
+    if (f.type) list = list.filter(t => t.type === f.type);
+    if (f.category) list = list.filter(t => t.category === f.category);
+
+    // Sort
+    const field = this.state.sortField();
+    const dir = this.state.sortDir() === 'asc' ? 1 : -1;
+
+    return [...list].sort((a, b) => {
+      if (field === 'date') return dir * a.date.localeCompare(b.date);
+      if (field === 'amount') return dir * (a.amount - b.amount);
+      return 0;
+    });
+  });
+
+  loadAll(): void {
+    if (this.state.all().length) return; // already cached
+
+    this.state.setLoading(true);
+    forkJoin({
+      transactions: this.api.getTransactions(),
+      categories: this.api.getCategories(),
+    })
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => this.state.setLoading(false))
+      )
+      .subscribe({
+        next: ({ transactions, categories }) => {
+          this.state.setAll(transactions);
+          this.state.setCategories(categories);
+        },
+        error: () => this.state.setError('Failed to load transactions.'),
+      });
+  }
+
+  setFilter(filter: TransactionFilter): void {
+    this.state.setFilter(filter);
+  }
+
+  resetFilter(): void {
+    this.state.setFilter({ dateFrom: null, dateTo: null, type: null, category: null });
+  }
+
+  setSort(field: SortField, dir: SortDirection): void {
+    this.state.setSortField(field);
+    this.state.setSortDir(dir);
+  }
+
+  createTransaction(dto: CreateTransactionDto): void {
+    const account = this.dashboard.selectedAccount();
+    if (!account) return;
+
+    // Business Rule 3.1 — Debit must not exceed balance
+    if (dto.type === 'Debit' && dto.amount > account.balance) {
+      this.state.setError('Debit amount exceeds account balance.');
+      return;
+    }
+
+    const dateStr = (dto.date as any) instanceof Date 
+      ? (dto.date as any).toISOString().split('T')[0] 
+      : dto.date;
+
+    const newTransaction: Transaction = {
+      id: `TRN_${uuidv4()}`,   // Business Rule 3.4 — client-side ID
+      accountId: account.id,
+      date: dateStr,
+      type: dto.type,
+      amount: dto.amount,
+      merchant: dto.merchant,
+      category: dto.category,
+    };
+
+    // Business Rules 3.2 & 3.3 — update balance
+    const delta = dto.type === 'Debit' ? -dto.amount : dto.amount;
+    this.dashboard.updateAccountBalance(account.id, delta);
+
+    // Business Rule 4.4 — appears immediately in UI
+
+    this.state.addTransaction(newTransaction);
+  }
+}

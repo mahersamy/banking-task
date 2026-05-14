@@ -1,37 +1,52 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
+
 import { DashboardFacade } from '../../data/dashboard.facade';
-import { DashboardState } from '../../data/dashboard.state';
 import { SegmentBadgeComponent } from '../../components/segment-badge/segment-badge.component';
 import { AccountCardComponent } from '../../components/account-card/account-card.component';
 
 @Component({
   selector: 'app-customer-detail',
   standalone: true,
-  imports: [CommonModule, SegmentBadgeComponent, AccountCardComponent],
+  imports: [
+    CommonModule,
+    SegmentBadgeComponent,
+    AccountCardComponent
+  ],
   templateUrl: './customer-detail.component.html',
   styleUrl: './customer-detail.component.scss'
 })
 export class CustomerDetailComponent implements OnInit {
+
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
-  private readonly customerFacade = inject(DashboardFacade);
-  readonly customerState = inject(DashboardState)
 
+  readonly facade = inject(DashboardFacade);
+
+  readonly accounts = this.facade.customerAccounts;
+
+  // بدل ما الصفحة تمسك state مباشر
+  readonly customer = this.facade.selectedCustomerDetail;
+
+  // دي أهم نقطة
+
+  readonly loading = this.facade.isLoading;
+  readonly error = this.facade.error;
 
   ngOnInit(): void {
-    const cif = this.route.snapshot.paramMap.get('cif');
+    const cif = this.route.snapshot.paramMap.get('id');
+
     if (!cif) {
       this.router.navigate(['/dashboard']);
       return;
     }
-    // ← Facade handles loading state, error state, and stores result in State
-    this.customerFacade.loadCustomerDetail(cif);
+
+    this.facade.loadCustomerDetail(cif);
   }
 
   goBack(): void {
-    this.customerFacade.clearSelection();
+    this.facade.clearSelection();
     this.router.navigate(['/dashboard']);
   }
 }

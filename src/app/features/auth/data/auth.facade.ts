@@ -1,5 +1,6 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, DestroyRef } from '@angular/core';
 import { Router } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AuthState } from './auth.state';
 import { LoginDto } from '../models/dto/login.dto';
 import { AuthApi } from './auth-api.service';
@@ -13,6 +14,7 @@ export class AuthFacade {
   private readonly state = inject(AuthState);
   private readonly router = inject(Router);
   private readonly storage = inject(StorageService);
+  private readonly destroyRef = inject(DestroyRef);
 
   // Expose signals directly to components
   readonly isLoading = this.state.isLoading;
@@ -34,6 +36,7 @@ export class AuthFacade {
 
     this.api
       .login(credentials)
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (res: LoginResponseDto) => {
           this.state.setAuthenticated(true);
