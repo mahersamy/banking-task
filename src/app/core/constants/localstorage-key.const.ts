@@ -1,3 +1,3 @@
-export const LOCALSTORAGE_ROUTE = {
+export const LOCALSTORAGE_KEY = {
     AUTH_TOKEN: 'auth_token',
 };

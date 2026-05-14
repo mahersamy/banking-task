@@ -18,7 +18,7 @@ export class AuthApi {
     login(data: LoginDto): Observable<LoginResponseDto> {
         const user = MOCK_USERS.find(u => u.email === data.email && u.password === data.password);
         if (user) {
-            return of({ token: uuidv4() }).pipe(delay(1000));
+            return of({ token: uuidv4() }).pipe(delay(500));
         } else {
             return timer(1000).pipe(concatMap(() => throwError(() => new Error('Invalid credentials'))));
         }
