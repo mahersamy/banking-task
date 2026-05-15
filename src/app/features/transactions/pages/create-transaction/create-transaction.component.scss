@@ -90,34 +90,7 @@ $indigo-soft: rgba(250, 193, 217, 0.1);
   }
 }
  
-// ── Type toggle ───────────────────────────────────────────
-:host ::ng-deep .type-toggle {
-    display: inline-flex;
-    border-radius: 0.75rem;
-    overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.04);
-    background: var(--gray-900);
 
-    .p-button {
-        background: transparent !important;
-        border: none !important;
-        color: rgba(255, 255, 255, 0.4) !important;
-        padding: 0.5rem 1.25rem !important;
-        font-size: 0.85rem !important;
-        font-weight: 600 !important;
-        transition: all 0.2s !important;
-
-        &.p-highlight {
-            background: var(--gray-700) !important;
-            color: var(--primary-pink) !important;
-        }
-
-        &:hover:not(.p-highlight) {
-            background: rgba(255, 255, 255, 0.03) !important;
-        }
-    }
-}
- 
 // ── Balance hint ──────────────────────────────────────────
 .balance-hint {
   margin-top: 1.25rem;

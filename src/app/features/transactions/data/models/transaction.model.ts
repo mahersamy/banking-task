@@ -16,8 +16,8 @@ export interface TransactionFilter {
 }
 
 export enum cardType {
-    SAVING = 'SAVING',
-    CURRENT = 'CURRENT',
+    CREDIT = 'Credit',
+    DEBIT = 'Debit',
 }
 
 export type SortField     = 'date' | 'amount';

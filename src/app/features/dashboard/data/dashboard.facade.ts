@@ -18,8 +18,12 @@ export class DashboardFacade {
   readonly isLoading              = this.state.isLoading;
   readonly error                  = this.state.error;
 
-  private readonly _selectedAccount = signal<Account | null>(null);
-  readonly selectedAccount          = this._selectedAccount.asReadonly();
+  private readonly _selectedAccountId = signal<string | null>(null);
+  
+  readonly selectedAccount = computed(() => {
+    const id = this._selectedAccountId();
+    return id ? (this.state.accounts().find(a => a.id === id) ?? null) : null;
+  });
 
   // ✅ Derived — always correct for whoever is selected, no stale data
   readonly customerAccounts = computed(() => {
@@ -96,21 +100,17 @@ export class DashboardFacade {
 
   // ── Account selection ─────────────────────────────────────
   selectAccount(accountId: string): void {
-    // ✅ search in ALL accounts, not filtered list
-    const found = this.state.accounts().find(a => a.id === accountId) ?? null;
-    this._selectedAccount.set(found);
+    this._selectedAccountId.set(accountId);
   }
 
   clearSelection(): void {
     this.state.setSelectedCustomer(null);
     this.state.setSelectedCustomerDetail(null);
-    this._selectedAccount.set(null);
-    // ✅ do NOT clear accounts — keep them cached
+    this._selectedAccountId.set(null);
   }
 
   // ── Balance update ────────────────────────────────────────
   updateAccountBalance(accountId: string, delta: number): void {
-    // ✅ NO guard — always runs
     this.state.setAccounts(
       this.state.accounts().map(a =>
         a.id === accountId
@@ -118,11 +118,5 @@ export class DashboardFacade {
           : a
       )
     );
-
-    // Keep selectedAccount signal in sync
-    if (this._selectedAccount()?.id === accountId) {
-      const updated = this.state.accounts().find(a => a.id === accountId) ?? null;
-      this._selectedAccount.set(updated);
-    }
   }
 }

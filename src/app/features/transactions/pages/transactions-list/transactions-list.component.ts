@@ -47,8 +47,8 @@ export class TransactionsListComponent implements OnInit {
   ngOnInit(): void {
     this.facade.loadAll();
 
-    // Re-hydrate state from Query Params on refresh
-    this.route.queryParamMap.subscribe(params => {
+    // Re-hydrate state from Path Params on refresh
+    this.route.paramMap.subscribe(params => {
       const cif = params.get('id');
       const accId = params.get('accountId');
       if (cif) this.dashboard.loadCustomerDetail(cif);
@@ -57,7 +57,7 @@ export class TransactionsListComponent implements OnInit {
   }
 
   goBack(): void {
-    const customerId = this.route.snapshot.queryParamMap.get('id');
+    const customerId = this.route.snapshot.paramMap.get('id');
     if (customerId) {
       this.router.navigate(['/dashboard/customers', customerId]);
     } else {

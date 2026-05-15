@@ -15,15 +15,17 @@
         <!-- Transaction Type -->
         <div class="field">
           <label>Transaction Type <span class="req">*</span></label>
-          <p-selectbutton
+          <p-select
             formControlName="type"
             [options]="[
-              { label: 'Debit', value: 'Debit' },
-              { label: 'Credit', value: 'Credit' },
+              { label: 'Debit', value: cardType.DEBIT },
+              { label: 'Credit', value: cardType.CREDIT },
             ]"
             optionLabel="label"
             optionValue="value"
-            styleClass="type-toggle"
+            placeholder="Select transaction type"
+            [fluid]="true"
+            styleClass="dark-input w-full"
           />
           <app-field-error [control]="form.controls.type" />
         </div>
@@ -32,7 +34,7 @@
         <div class="field">
           <label>Amount <span class="req">*</span></label>
           <p-iconfield>
-            <p-inputicon styleClass="pi pi-egyptian-pound" />
+            <p-inputicon />
             <p-inputnumber
               formControlName="amount"
               [minFractionDigits]="2"
@@ -75,7 +77,7 @@
         <div class="field">
           <label>Merchant <span class="req">*</span></label>
           <p-iconfield>
-            <p-inputicon styleClass="pi pi-building" />
+            <p-inputicon />
             <input
               pInputText
               formControlName="merchant"
@@ -113,7 +115,7 @@
       <!-- Actions -->
       <div class="form-actions">
         <button pButton type="button" (click)="cancel()" severity="secondary">Cancel</button>
-        <button pButton type="submit" class="btn-submit">
+        <button pButton type="submit" class="btn-submit" [disabled]="form.invalid || facade.loading()" [appLoading]="facade.loading()">
           <i class="pi pi-check"></i> Create Transaction
         </button>
       </div>

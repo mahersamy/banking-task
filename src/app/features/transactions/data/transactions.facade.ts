@@ -33,9 +33,24 @@ export class TransactionsFacade {
 
     const f = this.state.filter();
 
+    // Helper to extract YYYY-MM-DD local string from Date object
+    const toDateStr = (d: Date | string) => {
+      if (typeof d === 'string') return d;
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${y}-${m}-${day}`;
+    };
+
     // Filter
-    if (f.dateFrom) list = list.filter(t => new Date(t.date) >= f.dateFrom!);
-    if (f.dateTo) list = list.filter(t => new Date(t.date) <= f.dateTo!);
+    if (f.dateFrom) {
+      const fromStr = toDateStr(f.dateFrom);
+      list = list.filter(t => t.date >= fromStr);
+    }
+    if (f.dateTo) {
+      const toStr = toDateStr(f.dateTo);
+      list = list.filter(t => t.date <= toStr);
+    }
     if (f.type) list = list.filter(t => t.type === f.type);
     if (f.category) list = list.filter(t => t.category === f.category);
 
@@ -55,21 +70,21 @@ export class TransactionsFacade {
   readonly monthlyDebit = computed(() => {
     const month = new Date().toISOString().slice(0, 7); // e.g. "2025-12"
     return this.transactions()
-      .filter(t => t.type === cardType.CURRENT && t.date.startsWith(month))
+      .filter(t => t.type === cardType.DEBIT && t.date.startsWith(month))
       .reduce((sum, t) => sum + t.amount, 0);
   });
 
   readonly monthlyCredit = computed(() => {
     const month = new Date().toISOString().slice(0, 7);
     return this.transactions()
-      .filter(t => t.type === cardType.CURRENT && t.date.startsWith(month))
+      .filter(t => t.type === cardType.CREDIT && t.date.startsWith(month))
       .reduce((sum, t) => sum + t.amount, 0);
   });
 
   readonly topCategory = computed(() => {
     const month = new Date().toISOString().slice(0, 7);
     const debits = this.transactions()
-      .filter(t => t.type === cardType.CURRENT && t.date.startsWith(month));
+      .filter(t => t.type === cardType.DEBIT && t.date.startsWith(month));
 
     if (!debits.length) return null;
 
@@ -116,38 +131,46 @@ export class TransactionsFacade {
     this.state.setSortDir(dir);
   }
 
-  createTransaction(dto: CreateTransactionDto): void {
+  createTransaction(dto: CreateTransactionDto, onSuccess?: () => void): void {
     const account = this.dashboard.selectedAccount();
     if (!account) return;
 
     // Business Rule 3.1 — Debit must not exceed balance
-    if (dto.type === cardType.CURRENT && dto.amount > account.balance) {
+    if (dto.type === cardType.DEBIT && dto.amount > account.balance) {
       this.state.setError('Debit amount exceeds account balance.');
       return;
     }
 
-    const dateStr = (dto.date as any) instanceof Date
-      ? (dto.date as any).toISOString().split('T')[0]
-      : dto.date;
+    this.state.setLoading(true);
 
-    const newTransaction: Transaction = {
-      id: `TRN_${uuidv4()}`,   // Business Rule 3.4 — client-side ID
-      accountId: account.id,
-      date: dateStr,
-      type: dto.type,
-      amount: dto.amount,
-      merchant: dto.merchant,
-      category: dto.category,
-    };
+    // Simulate API delay to show loading state
+    setTimeout(() => {
+      const dateStr = (dto.date as any) instanceof Date
+        ? (dto.date as any).toISOString().split('T')[0]
+        : dto.date;
 
-    // Business Rules 3.2 & 3.3 — update balance
-    const delta = dto.type === cardType.CURRENT ? -dto.amount : dto.amount;
-    this.dashboard.updateAccountBalance(account.id, delta);
+      const newTransaction: Transaction = {
+        id: `TRN_${uuidv4()}`,   // Business Rule 3.4 — client-side ID
+        accountId: account.id,
+        date: dateStr,
+        type: dto.type,
+        amount: dto.amount,
+        merchant: dto.merchant,
+        category: dto.category,
+      };
 
-    // Business Rule 4.4 — appears immediately in UI
+      // Business Rules 3.2 & 3.3 — update balance
+      const delta = dto.type === cardType.DEBIT ? -dto.amount : dto.amount;
+      this.dashboard.updateAccountBalance(account.id, delta);
 
-    this.state.addTransaction(newTransaction);
+      this.state.addTransaction(newTransaction);
+      this.state.setLoading(false);
+      this.resetFilter(); // Clear filters so the new transaction is immediately visible
+      onSuccess?.();
+    }, 800);
   }
+
+
 
   allForAccount(accountId: string): Transaction[] {
     return [...this.state.all()]

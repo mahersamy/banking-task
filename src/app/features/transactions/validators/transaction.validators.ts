@@ -1,11 +1,12 @@
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { cardType } from '../data/models/transaction.model';
 
 // Date must not be in the future
 export function futureDateValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     if (!control.value) return null;
     const selected = new Date(control.value);
-    const today    = new Date();
+    const today = new Date();
     today.setHours(23, 59, 59, 999); // allow today
     return selected > today ? { futureDate: true } : null;
   };
@@ -23,11 +24,14 @@ export function maxDecimalsValidator(decimals: number): ValidatorFn {
 // Cross-field: debit must not exceed account balance
 export function exceedsBalanceValidator(getBalance: () => number): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
-    const form   = control.parent;
+    const form = control.parent;
     if (!form) return null;
-    const type   = form.get('type')?.value;
+    const type = form.get('type')?.value;
     const amount = parseFloat(control.value);
-    if (type === 'Debit' && amount > getBalance()) {
+    const balance = getBalance();
+    console.log('Validator Check:', { type, amount, balance });
+
+    if (type === cardType.DEBIT && amount > balance) {
       return { exceedsBalance: true };
     }
     return null;
