@@ -128,11 +128,8 @@
   @if (!facade.loading()) {
     <div class="table-card">
       <p-table
-        [value]="facade.transactions()"
-        [paginator]="true"
-        [rows]="10"
-        [rowsPerPageOptions]="[10, 25, 50]"
-        styleClass="dark-table"
+        [value]="paginatedTransactions()"
+        class="dark-table"
         [tableStyle]="{ 'min-width': '100%' }"
       >
         <ng-template pTemplate="header">
@@ -192,6 +189,16 @@
           </tr>
         </ng-template>
       </p-table>
+
+      @if (facade.transactions().length > 0) {
+        <app-pagination 
+          [totalRecords]="facade.transactions().length" 
+          [rows]="rows()" 
+          [page]="page()" 
+          (pageChange)="onPageChange($event)"
+          (rowsChange)="onRowsChange($event)">
+        </app-pagination>
+      }
     </div>
   }
 </div>

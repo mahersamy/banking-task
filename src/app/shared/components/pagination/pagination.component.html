@@ -1,0 +1,41 @@
+<div class="custom-pagination">
+  <div class="rows-selector">
+    <label>Rows per page:</label>
+    <p-select 
+      [ngModel]="rows()" 
+      (ngModelChange)="onRowsChange($event)" 
+      [options]="rowsOptions()"
+      class="pagination-dropdown"
+      appendTo="body"
+    />
+  </div>
+
+  <div class="page-controls">
+    <button 
+      class="page-btn nav-btn" 
+      [disabled]="page() === 1" 
+      (click)="prev()">
+      <i class="fa-solid fa-chevron-left"></i>
+    </button>
+
+    @for (p of pages(); track $index) {
+      @if (p === '...') {
+        <span class="dots">...</span>
+      } @else {
+        <button 
+          class="page-btn" 
+          [class.active]="p === page()" 
+          (click)="onPageClick(p)">
+          {{ p }}
+        </button>
+      }
+    }
+
+    <button 
+      class="page-btn nav-btn" 
+      [disabled]="page() === totalPages()" 
+      (click)="next()">
+      <i class="fa-solid fa-chevron-right"></i>
+    </button>
+  </div>
+</div>

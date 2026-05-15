@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnInit } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
@@ -13,6 +13,7 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { SelectModule } from 'primeng/select';
 import { ButtonModule } from 'primeng/button';
 import { exportToCsv } from '../../../../core/utils/export-csv.util';
+import { PaginationComponent } from '../../../../shared/components/pagination/pagination.component';
 
 @Component({
   selector: 'app-transactions-list',
@@ -25,7 +26,8 @@ import { exportToCsv } from '../../../../core/utils/export-csv.util';
     CardModule,
     DatePickerModule,
     SelectModule,
-    ButtonModule
+    ButtonModule,
+    PaginationComponent
   ],
   templateUrl: './transactions-list.component.html',
   styleUrl: './transaction-list.component.scss'
@@ -42,6 +44,16 @@ export class TransactionsListComponent implements OnInit {
     dateTo: [null],
     type: [null],
     category: [null],
+  });
+
+  // Pagination State
+  page = signal(1);
+  rows = signal(10);
+
+  paginatedTransactions = computed(() => {
+    const all = this.facade.transactions();
+    const start = (this.page() - 1) * this.rows();
+    return all.slice(start, start + this.rows());
   });
 
   ngOnInit(): void {
@@ -66,12 +78,23 @@ export class TransactionsListComponent implements OnInit {
   }
 
   applyFilter(): void {
+    this.page.set(1); // Reset to page 1 on filter
     this.facade.setFilter(this.filterForm.getRawValue() as any);
   }
 
   resetFilter(): void {
     this.filterForm.reset();
+    this.page.set(1);
     this.facade.resetFilter();
+  }
+
+  onPageChange(newPage: number): void {
+    this.page.set(newPage);
+  }
+
+  onRowsChange(newRows: number): void {
+    this.rows.set(newRows);
+    this.page.set(1); // Reset to first page when changing page size
   }
 
   sort(field: SortField): void {
