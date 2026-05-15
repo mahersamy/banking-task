@@ -17,7 +17,7 @@
   <nav class="sidebar-nav">
     @for (item of navItems; track item.label) {
       <a
-        [routerLink]="item.routerLink"
+        [routerLink]="item.route"
         routerLinkActive="active"
         class="nav-item">
         <span class="nav-icon">

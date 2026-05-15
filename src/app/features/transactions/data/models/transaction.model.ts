@@ -2,17 +2,22 @@ export interface Transaction {
   id: string;
   accountId: string;
   date: string;
-  type: 'Debit' | 'Credit';
+  type: cardType;
   amount: number;
   merchant: string;
   category: string;
 }
 
 export interface TransactionFilter {
-  dateFrom:  string | null;
-  dateTo:    string | null;
-  type:      string | null;
+  dateFrom:  Date | null;
+  dateTo:    Date | null;
+  type:      cardType | null;
   category:  string | null;
+}
+
+export enum cardType {
+    SAVING = 'SAVING',
+    CURRENT = 'CURRENT',
 }
 
 export type SortField     = 'date' | 'amount';

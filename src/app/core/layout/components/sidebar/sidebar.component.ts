@@ -1,12 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-
-export interface SidebarItem {
-  label: string;
-  icon: string;
-  routerLink: string;
-}
+import { Router, RouterModule } from '@angular/router';
+import { extractSidebarItems } from '../../../utils/extract-sidebar-items.util';
+import { NavItem } from '../../models/nav-item.interface';
 
 @Component({
   selector: 'app-sidebar',
@@ -16,11 +12,6 @@ export interface SidebarItem {
   styleUrl: './sidebar.component.scss'
 })
 export class SidebarComponent {
-  readonly navItems: SidebarItem[] = [
-    {
-      label: 'Dashboard',
-      icon: 'fa-solid fa-chart-pie',
-      routerLink: '/dashboard'
-    },
-  ];
+  private readonly router = inject(Router);
+  readonly navItems: NavItem[] = extractSidebarItems(this.router.config);
 }

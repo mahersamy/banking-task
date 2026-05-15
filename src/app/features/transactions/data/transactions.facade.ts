@@ -6,7 +6,7 @@ import { TransactionsApiService } from './transactions-api.service';
 import { TransactionsState } from './transactions.state';
 import { DashboardFacade } from '../../dashboard/data/dashboard.facade';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
-import { Transaction, TransactionFilter, SortField, SortDirection } from './models/transaction.model';
+import { Transaction, TransactionFilter, SortField, SortDirection, cardType } from './models/transaction.model';
 import { v4 as uuidv4 } from 'uuid';
 
 @Injectable({ providedIn: 'root' })
@@ -34,8 +34,8 @@ export class TransactionsFacade {
     const f = this.state.filter();
 
     // Filter
-    if (f.dateFrom) list = list.filter(t => t.date >= f.dateFrom!);
-    if (f.dateTo) list = list.filter(t => t.date <= f.dateTo!);
+    if (f.dateFrom) list = list.filter(t => new Date(t.date) >= f.dateFrom!);
+    if (f.dateTo) list = list.filter(t => new Date(t.date) <= f.dateTo!);
     if (f.type) list = list.filter(t => t.type === f.type);
     if (f.category) list = list.filter(t => t.category === f.category);
 
@@ -55,21 +55,21 @@ export class TransactionsFacade {
   readonly monthlyDebit = computed(() => {
     const month = new Date().toISOString().slice(0, 7); // e.g. "2025-12"
     return this.transactions()
-      .filter(t => t.type === 'Debit' && t.date.startsWith(month))
+      .filter(t => t.type === cardType.CURRENT && t.date.startsWith(month))
       .reduce((sum, t) => sum + t.amount, 0);
   });
 
   readonly monthlyCredit = computed(() => {
     const month = new Date().toISOString().slice(0, 7);
     return this.transactions()
-      .filter(t => t.type === 'Credit' && t.date.startsWith(month))
+      .filter(t => t.type === cardType.CURRENT && t.date.startsWith(month))
       .reduce((sum, t) => sum + t.amount, 0);
   });
 
   readonly topCategory = computed(() => {
     const month = new Date().toISOString().slice(0, 7);
     const debits = this.transactions()
-      .filter(t => t.type === 'Debit' && t.date.startsWith(month));
+      .filter(t => t.type === cardType.CURRENT && t.date.startsWith(month));
 
     if (!debits.length) return null;
 
@@ -121,7 +121,7 @@ export class TransactionsFacade {
     if (!account) return;
 
     // Business Rule 3.1 — Debit must not exceed balance
-    if (dto.type === 'Debit' && dto.amount > account.balance) {
+    if (dto.type === cardType.CURRENT && dto.amount > account.balance) {
       this.state.setError('Debit amount exceeds account balance.');
       return;
     }
@@ -141,7 +141,7 @@ export class TransactionsFacade {
     };
 
     // Business Rules 3.2 & 3.3 — update balance
-    const delta = dto.type === 'Debit' ? -dto.amount : dto.amount;
+    const delta = dto.type === cardType.CURRENT ? -dto.amount : dto.amount;
     this.dashboard.updateAccountBalance(account.id, delta);
 
     // Business Rule 4.4 — appears immediately in UI
