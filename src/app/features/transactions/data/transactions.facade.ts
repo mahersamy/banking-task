@@ -23,12 +23,10 @@ export class TransactionsFacade {
   readonly sortField = this.state.sortField;
   readonly sortDir = this.state.sortDir;
 
-  // Transactions — filtered by account (if selected) + global filters + sorted
   readonly transactions = computed(() => {
     const accountId = this.dashboard.selectedAccount()?.id;
     let list = this.state.all();
 
-    // Filter by account if one is selected (contextual view)
     if (accountId) {
       list = list.filter((t: Transaction) => t.accountId === accountId);
     }
@@ -50,6 +48,38 @@ export class TransactionsFacade {
       if (field === 'amount') return dir * (a.amount - b.amount);
       return 0;
     });
+  });
+
+
+  // monthly debit and credit
+  readonly monthlyDebit = computed(() => {
+    const month = new Date().toISOString().slice(0, 7); // e.g. "2025-12"
+    return this.transactions()
+      .filter(t => t.type === 'Debit' && t.date.startsWith(month))
+      .reduce((sum, t) => sum + t.amount, 0);
+  });
+
+  readonly monthlyCredit = computed(() => {
+    const month = new Date().toISOString().slice(0, 7);
+    return this.transactions()
+      .filter(t => t.type === 'Credit' && t.date.startsWith(month))
+      .reduce((sum, t) => sum + t.amount, 0);
+  });
+
+  readonly topCategory = computed(() => {
+    const month = new Date().toISOString().slice(0, 7);
+    const debits = this.transactions()
+      .filter(t => t.type === 'Debit' && t.date.startsWith(month));
+
+    if (!debits.length) return null;
+
+    const totals = debits.reduce<Record<string, number>>((acc, t) => {
+      acc[t.category] = (acc[t.category] ?? 0) + t.amount;
+      return acc;
+    }, {});
+
+    return Object.entries(totals).sort((a, b) => b[1] - a[1])[0];
+    // returns [categoryName, totalAmount] e.g. ["Groceries", 450.75]
   });
 
   loadAll(): void {
@@ -96,8 +126,8 @@ export class TransactionsFacade {
       return;
     }
 
-    const dateStr = (dto.date as any) instanceof Date 
-      ? (dto.date as any).toISOString().split('T')[0] 
+    const dateStr = (dto.date as any) instanceof Date
+      ? (dto.date as any).toISOString().split('T')[0]
       : dto.date;
 
     const newTransaction: Transaction = {
@@ -117,5 +147,11 @@ export class TransactionsFacade {
     // Business Rule 4.4 — appears immediately in UI
 
     this.state.addTransaction(newTransaction);
+  }
+
+  allForAccount(accountId: string): Transaction[] {
+    return [...this.state.all()]
+      .filter(t => t.accountId === accountId)
+      .sort((a, b) => b.date.localeCompare(a.date));
   }
 }

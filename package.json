@@ -41,6 +41,7 @@
     "@primeuix/themes": "^2.0.3",
     "bootstrap": "^5.3.8",
     "express": "^5.1.0",
+    "ngx-csv": "^0.3.2",
     "primeng": "^21.1.7",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",

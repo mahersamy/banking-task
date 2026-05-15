@@ -12,6 +12,7 @@ import { CardModule } from 'primeng/card';
 import { DatePickerModule } from 'primeng/datepicker';
 import { SelectModule } from 'primeng/select';
 import { ButtonModule } from 'primeng/button';
+import { exportToCsv } from '../../../../core/utils/export-csv.util';
 
 @Component({
   selector: 'app-transactions-list',
@@ -80,6 +81,20 @@ export class TransactionsListComponent implements OnInit {
     this.facade.setSort(field, dir);
   }
 
+  exportCsv(): void {
+    exportToCsv(
+      this.facade.transactions(),
+      [
+        { label: 'ID', key: 'id' },
+        { label: 'Date', key: 'date' },
+        { label: 'Type', key: 'type' },
+        { label: 'Amount', key: 'amount' },
+        { label: 'Merchant', key: 'merchant' },
+        { label: 'Category', key: 'category' },
+      ],
+      'transactions'
+    );
+  }
 
   readonly categoryOptions = computed(() => [
     { label: 'All Categories', value: null },

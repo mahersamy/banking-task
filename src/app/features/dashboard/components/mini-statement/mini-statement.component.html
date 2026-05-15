@@ -1,0 +1,23 @@
+@if (lastFive().length) {
+  <div class="mini-statement">
+    <div class="ms-header">
+      <i class="fa-solid fa-clock-rotate-left"></i>
+      Last {{ lastFive().length }} transactions
+    </div>
+
+    <div class="ms-list">
+      @for (t of lastFive(); track t.id) {
+        <div class="ms-row">
+          <div class="ms-left">
+            <span class="ms-merchant">{{ t.merchant }}</span>
+            <span class="ms-date">{{ t.date }}</span>
+          </div>
+          <span class="ms-amount" [class.debit]="t.type === 'Debit'"
+                                  [class.credit]="t.type === 'Credit'">
+            {{ t.type === 'Debit' ? '−' : '+' }}{{ t.amount | number:'1.2-2' }}
+          </span>
+        </div>
+      }
+    </div>
+  </div>
+}

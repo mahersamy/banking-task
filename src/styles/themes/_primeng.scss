@@ -1,10 +1,15 @@
 ::ng-deep {
-    .p-inputtext {
-        background: #2b2e30 !important;
+    /* Shared Input Styles */
+    .p-inputtext,
+    .p-datepicker-input,
+    .p-select,
+    .p-inputnumber-input,
+    .p-password-input {
+        background: var(--gray-800) !important;
         border: 1px solid rgba(255, 255, 255, 0.04) !important;
         color: #fff !important;
         border-radius: 0.75rem !important;
-        padding: 1rem 1.25rem !important;
+        padding: 0.75rem 1.25rem !important;
         width: 100%;
         font-family: var(--font-family-base) !important;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
@@ -14,14 +19,16 @@
             color: rgba(255, 255, 255, 0.2) !important;
         }
 
-        &:enabled:focus {
+        &:enabled:focus,
+        &.p-focus {
             border-color: var(--primary-pink) !important;
-            background: #333638 !important;
+            background: var(--gray-700) !important;
             box-shadow: 0 0 0 4px rgba(250, 193, 217, 0.06) !important;
         }
 
-        &:enabled:hover:not(:focus) {
-            background: #303336 !important;
+        &:enabled:hover:not(:focus),
+        &:hover:not(.p-focus) {
+            background: var(--gray-700) !important;
             border-color: rgba(255, 255, 255, 0.08) !important;
         }
 
@@ -36,35 +43,80 @@
         }
     }
 
-    .p-password {
-        width: 100%;
-        display: inline-flex;
-        position: relative;
-
-        .p-inputtext {
-            width: 100% !important;
-            padding-right: 3rem !important;
+    /* Specific fixes for Select/Dropdown */
+    .p-select {
+        display: flex;
+        align-items: center;
+        background: var(--gray-800) !important;
+        
+        .p-select-label {
+            padding: 0 !important;
+            background: transparent !important;
+            border: none !important;
+            color: #fff !important;
         }
 
-        &.ng-invalid.ng-touched,
-        &.ng-invalid.ng-dirty {
-            .p-inputtext {
-                border-color: var(--error-color) !important;
+        .p-select-dropdown {
+            color: rgba(255, 255, 255, 0.4) !important;
+        }
+    }
 
-                &:focus {
-                    border-color: var(--error-color) !important;
-                    box-shadow: 0 0 0 4px rgba(231, 0, 0, 0.1) !important;
-                }
+    /* Specific fixes for DatePicker */
+    .p-datepicker {
+        width: 100%;
+        .p-datepicker-input {
+            width: 100% !important;
+        }
+        .p-datepicker-trigger {
+            background: transparent !important;
+            color: rgba(255, 255, 255, 0.4) !important;
+            border: none !important;
+            border-left: 1px solid rgba(255, 255, 255, 0.04) !important;
+            border-radius: 0 0.75rem 0.75rem 0 !important;
+        }
+    }
+
+    /* SelectButton / ToggleButton */
+    .p-selectbutton {
+        display: inline-flex;
+        border-radius: 0.75rem;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.04);
+        background: var(--gray-900);
+
+        .p-button {
+            background: transparent !important;
+            border: none !important;
+            color: rgba(255, 255, 255, 0.4) !important;
+            padding: 0.5rem 1rem !important;
+            font-size: 0.85rem !important;
+            font-weight: 600 !important;
+            transition: all 0.2s !important;
+
+            &.p-highlight {
+                background: var(--gray-700) !important;
+                color: var(--primary-pink) !important;
+            }
+
+            &:hover:not(.p-highlight) {
+                background: rgba(255, 255, 255, 0.03) !important;
             }
         }
     }
 
-    .p-icon-field {
+    /* Input Icon Field */
+    .p-iconfield {
         width: 100%;
+        .p-inputicon {
+            color: rgba(255, 255, 255, 0.4) !important;
+        }
     }
 
-    .p-password-input {
-        width: 100% !important;
+    /* Global helper for white backgrounds in components */
+    .dark-input {
+        background: var(--gray-800) !important;
+        color: #fff !important;
+        border-color: rgba(255, 255, 255, 0.04) !important;
     }
 
     /* Password Toggle Icon */

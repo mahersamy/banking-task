@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DashboardFacade } from '../../data/dashboard.facade';
 import { SegmentBadgeComponent } from '../../components/segment-badge/segment-badge.component';
 import { AccountCardComponent } from '../../components/account-card/account-card.component';
+import { MiniStatementComponent } from '../../components/mini-statement/mini-statement.component';
 
 @Component({
   selector: 'app-customer-detail',
@@ -12,7 +13,8 @@ import { AccountCardComponent } from '../../components/account-card/account-card
   imports: [
     CommonModule,
     SegmentBadgeComponent,
-    AccountCardComponent
+    AccountCardComponent,
+    MiniStatementComponent
   ],
   templateUrl: './customer-detail.component.html',
   styleUrl: './customer-detail.component.scss'
@@ -26,10 +28,7 @@ export class CustomerDetailComponent implements OnInit {
 
   readonly accounts = this.facade.customerAccounts;
 
-  // بدل ما الصفحة تمسك state مباشر
   readonly customer = this.facade.selectedCustomerDetail;
-
-  // دي أهم نقطة
 
   readonly loading = this.facade.isLoading;
   readonly error = this.facade.error;

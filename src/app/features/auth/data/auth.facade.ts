@@ -21,12 +21,6 @@ export class AuthFacade {
   readonly isAuthenticated = this.state.isAuthenticated;
   readonly error = this.state.error;
   
-  constructor() {
-    if (this.isLoggedIn()){
-      this.state.setAuthenticated(true);
-      this.router.navigate(['/dashboard']);
-    }
-  }
 
   login(credentials: LoginDto): void {
     this.state.setLoading(true);

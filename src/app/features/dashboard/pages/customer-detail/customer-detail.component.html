@@ -72,7 +72,10 @@
 
       <div class="accounts-list">
         @for (account of accounts(); track account.id) {
-          <app-account-card [account]="account" />
+          <div>
+            <app-account-card [account]="account" />
+            <app-mini-statement [accountId]="account.id" />
+          </div>
         } @empty {
           <div class="text-center py-4">
             <i

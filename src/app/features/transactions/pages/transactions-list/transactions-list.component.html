@@ -11,10 +11,57 @@
         <p class="page-subtitle">{{ facade.transactions().length }} records found</p>
       </div>
     </div>
-    <button class="btn-add" routerLink="new">
-      <i class="fa-solid fa-plus"></i> New Transaction
-    </button>
+    <div class="d-flex gap-2">
+      <button class="btn-export" (click)="exportCsv()" [disabled]="!facade.transactions().length">
+        <i class="fa-solid fa-file-csv"></i> Export CSV
+      </button>
+
+      <button class="btn-add" routerLink="new">
+        <i class="fa-solid fa-plus"></i> New Transaction
+      </button>
+    </div>
   </div>
+
+  <!-- Monthly Insights -->
+  @if (!facade.loading()) {
+    <div class="insights-grid">
+
+      <div class="insight-card debit">
+        <div class="insight-label">
+          <i class="fa-solid fa-arrow-up"></i> Monthly Debit
+        </div>
+        <div class="insight-value">
+          {{ facade.monthlyDebit() | number:'1.2-2' }}
+        </div>
+      </div>
+
+      <div class="insight-card credit">
+        <div class="insight-label">
+          <i class="fa-solid fa-arrow-down"></i> Monthly Credit
+        </div>
+        <div class="insight-value">
+          {{ facade.monthlyCredit() | number:'1.2-2' }}
+        </div>
+      </div>
+
+      <div class="insight-card category">
+        <div class="insight-label">
+          <i class="fa-solid fa-fire"></i> Top Category
+        </div>
+        <div class="insight-value">
+          @if (facade.topCategory()) {
+            {{ facade.topCategory()![0] }}
+            <span class="insight-sub">
+              {{ facade.topCategory()![1] | number:'1.2-2' }}
+            </span>
+          } @else {
+            —
+          }
+        </div>
+      </div>
+
+    </div>
+  }
 
   <!-- Filters -->
   <p-card styleClass="filters-card">

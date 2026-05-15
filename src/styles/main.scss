@@ -1,14 +1,14 @@
-// Abstracts (don't generate CSS, just variables/mixins/functions)
+/* Abstracts (don't generate CSS, just variables/mixins/functions) */
 @use 'abstracts' as *;
 
-// Base Styles
+/* Base Styles */
 @use 'base';
 
-// Theme Styles
+/* Theme Styles */
 @use 'themes';
 
-// Component Styles
+/* Component Styles */
 @use 'components';
 
-// Utility Styles
+/* Utility Styles */
 @use 'utilities';

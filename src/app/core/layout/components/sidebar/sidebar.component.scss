@@ -1,6 +1,8 @@
+@use "../../../../../styles/abstracts" as *;
+
 .layout-sidebar {
-  width: 260px;
-  min-width: 260px;
+  width: 80px;
+  min-width: 80px;
   height: 100vh;
   background: linear-gradient(180deg, #0f1117 0%, #161b2e 100%);
   border-right: 1px solid rgba(255, 255, 255, 0.06);
@@ -9,6 +11,12 @@
   box-shadow: 4px 0 32px rgba(0, 0, 0, 0.35);
   overflow: hidden;
   z-index: 200;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  @include respond-to('md') {
+    width: 260px;
+    min-width: 260px;
+  }
 }
 
 // Brand / Logo
@@ -16,8 +24,12 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 1.75rem 1.5rem 1.5rem;
+  padding: 1.75rem 1rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+
+  @include respond-to('md') {
+    padding: 1.75rem 1.5rem 1.5rem;
+  }
 
   .brand-icon {
     width: 42px;
@@ -34,8 +46,12 @@
   }
 
   .brand-text {
-    display: flex;
+    display: none;
     flex-direction: column;
+
+    @include respond-to('md') {
+      display: flex;
+    }
 
     .brand-name {
       font-size: 1rem;
@@ -56,12 +72,17 @@
 
 // Section Label
 .nav-section-label {
+  display: none;
   font-size: 0.65rem;
   font-weight: 700;
   color: rgba(255, 255, 255, 0.25);
   letter-spacing: 0.1em;
   padding: 1.5rem 1.5rem 0.5rem;
   margin: 0;
+
+  @include respond-to('md') {
+    display: block;
+  }
 }
 
 // Nav
@@ -69,15 +90,20 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 0.5rem;
   flex: 1;
+
+  @include respond-to('md') {
+    padding: 0.5rem 1rem;
+  }
 }
 
 .nav-item {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 12px;
-  padding: 0.75rem 1rem;
+  padding: 0.75rem 0.5rem;
   border-radius: 10px;
   color: rgba(255, 255, 255, 0.55);
   text-decoration: none;
@@ -86,6 +112,11 @@
   transition: all 0.2s ease;
   position: relative;
   overflow: hidden;
+
+  @include respond-to('md') {
+    justify-content: flex-start;
+    padding: 0.75rem 1rem;
+  }
 
   &::before {
     content: '';
@@ -112,7 +143,11 @@
     color: #fff;
     background: rgba(99, 102, 241, 0.15);
     border-left: 3px solid #6366f1;
-    padding-left: calc(1rem - 3px);
+    padding-left: calc(0.5rem - 3px);
+
+    @include respond-to('md') {
+        padding-left: calc(1rem - 3px);
+    }
 
     .nav-icon {
       color: #6366f1;
@@ -133,16 +168,27 @@
   }
 
   .nav-label {
+    display: none;
     flex: 1;
+
+    @include respond-to('md') {
+      display: block;
+    }
   }
 }
 
 // Footer
 .sidebar-footer {
-  padding: 1rem 1.5rem;
+  padding: 1rem;
   border-top: 1px solid rgba(255, 255, 255, 0.06);
   display: flex;
   align-items: center;
+  justify-content: center;
+
+  @include respond-to('md') {
+    padding: 1rem 1.5rem;
+    justify-content: flex-start;
+  }
 
   .version-badge {
     font-size: 0.65rem;

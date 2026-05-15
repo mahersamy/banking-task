@@ -1,10 +1,10 @@
 :root {
-    // Fonts
+    /* Fonts */
     --font-1: 'Poppins', sans-serif;
     --font-2: 'Rubik', sans-serif;
     --font-3: 'Inter', sans-serif;
 
-    // Primitive Design System Colors (22 Colors)
+    /* Primitive Design System Colors (22 Colors) */
     --white: #ffffff;
     --black: #000000;
 
@@ -35,7 +35,10 @@
     --gray-800: #292c2d;
     --gray-900: #111315;
 
-    // Semantic Theme Mappings
+
+    --bg-main:var(--gray-900)
+
+    /* Semantic Theme Mappings */
     --secondary-color: var(--gray-800);
     --secondary-color-2: var(--gray-700);
     --text-main: var(--gray-400);
@@ -45,7 +48,7 @@
     --primary-pink: var(--pink-100);
     --primary-pink-hover: var(--pink-200);
 
-    // UI Elements
+    /* UI Elements */
     --input-border: rgba(255, 255, 255, 0.04);
     --input-focus-border: var(--primary-pink);
     --input-placeholder: rgba(255, 255, 255, 0.2);
@@ -63,7 +66,7 @@
     --side-nav-item-color: var(--white);
     --side-nav-item-border: var(--gray-700);
 
-    // Buttons
+    /* Buttons */
     --btn-primary-bg: var(--pink-100);
     --btn-primary-text: var(--gray-600);
     --btn-primary-hover: var(--pink-200);
@@ -78,7 +81,7 @@
 
     --surface-gradient-bg: linear-gradient(180deg, rgba(26, 28, 30, 0.88) 0%, #121315 100%);
     --surface-gradient-border: rgba(255, 255, 255, 0.176);
-    // Checkbox
+    /* Checkbox */
     --p-checkbox-checked-background: var(--primary-pink) !important;
     --p-checkbox-checked-border-color: var(--primary-pink) !important;
     --p-form-field-hover-border-color: var(--primary-pink) !important;
@@ -86,10 +89,10 @@
     --p-checkbox-checked-hover-background: var(--primary-pink) !important;
     --p-checkbox-checked-hover-border-color: var(--primary-pink) !important;
 
-    // Dialog
+    /* Dialog */
     --dialog-footer-bg: #18181B;
 }
 
 .light-mode {
-    // Keep placeholders for future light mode if needed
+    /* Keep placeholders for future light mode if needed */
 }
