@@ -26,6 +26,33 @@
  "merchant": "Company Salary",
  "category": "Income"
  },
+  {
+ "id": "T9005",
+ "accountId": "A1001",
+ "date": "2026-05-15",
+ "type": "Credit",
+ "amount": 2000.00,
+ "merchant": "freelance",
+ "category": "Income"
+ },
+  {
+ "id": "T90038",
+ "accountId": "A1001",
+ "date": "2026-05-15",
+ "type": "Debit",
+ "amount": 1000.00,
+ "merchant": "online course angular",
+ "category": "Bills"
+ },
+  {
+ "id": "T90038",
+ "accountId": "A1001",
+ "date": "2026-05-15",
+ "type": "Debit",
+ "amount": 1000.00,
+ "merchant": "online course ngrx",
+ "category": "Bills"
+ },
  {
  "id": "T9101",
  "accountId": "A2001",

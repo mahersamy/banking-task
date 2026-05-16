@@ -11,6 +11,7 @@ import { authInterceptor } from './core/interceptors/auth-interceptor';
 import { errorHandlingInterceptor } from './core/interceptors/error-handling.interceptor';
 import { MessageService } from 'primeng/api';
 import { provideTanStackQuery, QueryClient } from '@tanstack/angular-query-experimental';
+import { withDevtools } from '@tanstack/angular-query-experimental/devtools'
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -24,6 +25,6 @@ export const appConfig: ApplicationConfig = {
       }
     }),
     MessageService,
-    provideTanStackQuery(new QueryClient()),
+    provideTanStackQuery(new QueryClient(), withDevtools()),
   ]
 };
