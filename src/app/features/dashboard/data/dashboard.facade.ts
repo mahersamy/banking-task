@@ -1,122 +1,132 @@
 import { Injectable, inject, signal, computed, DestroyRef } from '@angular/core';
-import { finalize } from 'rxjs/operators';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DashboardApiService } from './dashboard-api.service';
-import { DashboardState } from './dashboard.state';
 import { Customer } from './models/customer.model';
 import { Account } from './models/account.model';
+import { injectQuery, QueryClient } from '@tanstack/angular-query-experimental';
+import { lastValueFrom } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class DashboardFacade {
   private readonly api        = inject(DashboardApiService);
-  private readonly state      = inject(DashboardState);
-  private readonly destroyRef = inject(DestroyRef);
+  private readonly queryClient = inject(QueryClient);
 
-  readonly customers              = this.state.customers;
-  readonly selectedCustomer       = this.state.selectedCustomer;
-  readonly selectedCustomerDetail = this.state.selectedCustomerDetail;
-  readonly isLoading              = this.state.isLoading;
-  readonly error                  = this.state.error;
+  // ── Queries ──────────────────────────────────────────────
+
+  customersQuery = injectQuery(() => ({
+    queryKey: ['customers'],
+    queryFn: () => lastValueFrom(this.api.getCustomers()),
+    staleTime: 5 * 60 * 1000,
+  }));
+
+  accountsQuery = injectQuery(() => ({
+    queryKey: ['accounts'],
+    queryFn: () => lastValueFrom(this.api.getAccounts()),
+    staleTime: 5 * 60 * 1000,
+  }));
+
+  private readonly _selectedCif = signal<string | null>(null);
+
+  customerDetailQuery = injectQuery(() => ({
+    queryKey: ['customerDetail', this._selectedCif()],
+    queryFn: () => {
+      const cif = this._selectedCif();
+      if (!cif) return Promise.resolve(null);
+      return lastValueFrom(this.api.getCustomer(cif));
+    },
+    enabled: !!this._selectedCif(),
+    staleTime: 5 * 60 * 1000,
+  }));
+
+  // ── Public State ─────────────────────────────────────────
+
+  readonly customers              = computed(() => this.customersQuery.data() ?? []);
+  readonly isCustomersLoading     = this.customersQuery.isLoading;
+  readonly customersError         = this.customersQuery.error;
+
+  readonly accounts               = computed(() => this.accountsQuery.data() ?? []);
+  readonly isAccountsLoading      = this.accountsQuery.isLoading;
+
+  readonly selectedCustomerDetail = computed(() => this.customerDetailQuery.data() ?? null);
+  
+  // We can merge loading states if needed by old components
+  readonly isLoading = computed(() => 
+    this.customersQuery.isLoading() || 
+    this.accountsQuery.isLoading() || 
+    this.customerDetailQuery.isLoading()
+  );
+
+  readonly error = computed(() => 
+    this.customersQuery.error()?.message || 
+    this.accountsQuery.error()?.message || 
+    this.customerDetailQuery.error()?.message || 
+    null
+  );
 
   private readonly _selectedAccountId = signal<string | null>(null);
   
   readonly selectedAccount = computed(() => {
     const id = this._selectedAccountId();
-    return id ? (this.state.accounts().find(a => a.id === id) ?? null) : null;
+    return id ? (this.accounts().find(a => a.id === id) ?? null) : null;
   });
 
-  // ✅ Derived — always correct for whoever is selected, no stale data
+  // Derived — filters accounts for the selected CIF
   readonly customerAccounts = computed(() => {
-  const cif = this.state.selectedCustomerDetail()?.CIF;
+    const cif = this._selectedCif();
+    if (!cif) return [];
+    return this.accounts().filter(a => a.customerId === cif);
+  });
 
-  if (!cif) return [];
+  // For the customer list to highlight the selected row
+  readonly selectedCustomer = computed(() => {
+    const cif = this._selectedCif();
+    return cif ? (this.customers().find(c => c.CIF === cif) ?? null) : null;
+  });
 
-  return this.state
-    .accounts()
-    .filter(a => a.customerId === cif);
-});
+  // ── Actions ──────────────────────────────────────────────
 
-  // ── Customers ────────────────────────────────────────────
-  loadCustomers(): void {
-    if (this.state.customers().length) return; // ✅ cache guard
-
-    this.state.setLoading(true);
-    this.state.setError(null);
-
-    this.api.getCustomers()
-      .pipe(
-        takeUntilDestroyed(this.destroyRef),
-        finalize(() => this.state.setLoading(false))
-      )
-      .subscribe({
-        next:  (customers) => this.state.setCustomers(customers),
-        error: ()          => this.state.setError('Failed to load customers.'),
-      });
-  }
-
-  // ── Accounts ─────────────────────────────────────────────
-  private loadAccounts(): void {
-    if (this.state.accounts().length) return; // ✅ load once, never again
-
-    this.state.setLoading(true);
-
-    this.api.getAccounts()
-      .pipe(
-        takeUntilDestroyed(this.destroyRef),
-        finalize(() => this.state.setLoading(false))
-      )
-      .subscribe({
-        next: (accounts) => {
-          this.state.setAccounts(accounts); // ✅ ALL accounts stored — never filtered
-        },
-        error: () => this.state.setError('Failed to load accounts.'),
-      });
-  }
-
-  // ── Customer selection ────────────────────────────────────
   selectCustomer(customer: Customer): void {
-    this.state.setSelectedCustomer(customer);
-    this.loadAccounts(); // ✅ loads all once, derived signal filters for this customer
+    this._selectedCif.set(customer.CIF);
   }
 
   loadCustomerDetail(CIF: string): void {
-    this.state.setLoading(true);
-    this.state.setError(null);
-    this.state.setSelectedCustomerDetail(null);
-
-    this.api.getCustomer(CIF)
-      .pipe(
-        takeUntilDestroyed(this.destroyRef),
-        finalize(() => this.state.setLoading(false))
-      )
-      .subscribe({
-        next: (detail) => {
-          this.state.setSelectedCustomerDetail(detail);
-          this.loadAccounts(); // ✅ same — loads all once
-        },
-        error: (err) => this.state.setError(err.message ?? 'Failed to load detail.'),
-      });
+    // Just setting the signal triggers the query to fetch if not cached
+    this._selectedCif.set(CIF);
   }
 
-  // ── Account selection ─────────────────────────────────────
   selectAccount(accountId: string): void {
     this._selectedAccountId.set(accountId);
   }
 
   clearSelection(): void {
-    this.state.setSelectedCustomer(null);
-    this.state.setSelectedCustomerDetail(null);
+    this._selectedCif.set(null);
     this._selectedAccountId.set(null);
   }
 
-  // ── Balance update ────────────────────────────────────────
   updateAccountBalance(accountId: string, delta: number): void {
-    this.state.setAccounts(
-      this.state.accounts().map(a =>
+    // Update accounts cache
+    this.queryClient.setQueryData(['accounts'], (old: Account[] | undefined) => {
+      if (!old) return [];
+      return old.map(a =>
         a.id === accountId
           ? { ...a, balance: parseFloat((a.balance + delta).toFixed(2)) }
           : a
-      )
-    );
+      );
+    });
+
+    // We also need to update the customerDetail cache because it contains an accounts array
+    const cif = this._selectedCif();
+    if (cif) {
+      this.queryClient.setQueryData(['customerDetail', cif], (old: any) => {
+        if (!old) return null;
+        return {
+          ...old,
+          accounts: old.accounts.map((a: Account) => 
+            a.id === accountId
+              ? { ...a, balance: parseFloat((a.balance + delta).toFixed(2)) }
+              : a
+          )
+        };
+      });
+    }
   }
 }

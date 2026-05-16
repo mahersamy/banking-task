@@ -4,7 +4,7 @@
     <div class="blob blob-2"></div>
   </div>
 
-  <p-card styleClass="login-card shadow-2xl">
+  <p-card class="login-card shadow-2xl">
     <div class="login-header">
       <div class="logo">
         <i class="fa-solid fa-shield text-4xl text-primary mb-3"></i>
@@ -13,8 +13,8 @@
       </div>
     </div>
 
-    @if (authState.error()) {
-      <p-message [life]="3000" severity="error">{{ authState.error() }}</p-message>
+    @if (authFacade.error()) {
+      <p-message [life]="3000" severity="error">{{ authFacade.error() }}</p-message>
     }
 
     <form [formGroup]="form" (ngSubmit)="login()" class="login-form mt-4">
@@ -51,7 +51,7 @@
       </div>
 
       <div class="flex flex-column gap-3 mt-2">
-        <button type="submit" class="btn-primary w-100" [disabled]="form.invalid || authState.isLoading()" [appLoading]="authState.isLoading()">
+        <button type="submit" class="btn-primary w-100" [disabled]="form.invalid || authFacade.isLoading()" [appLoading]="authFacade.isLoading()">
           <span>Sign In</span>
         </button>
       </div>

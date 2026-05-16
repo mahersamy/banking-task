@@ -38,8 +38,7 @@ import { AuthState } from '../../data/auth.state';
 })
 export class LoginComponent {
   private readonly fb = inject(FormBuilder);
-  private readonly authFacade = inject(AuthFacade);
-  readonly authState = inject(AuthState);
+  readonly authFacade = inject(AuthFacade);
 
   form = this.fb.group({
     email: ['', [Validators.required, Validators.email]],

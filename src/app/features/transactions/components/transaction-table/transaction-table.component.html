@@ -1,0 +1,72 @@
+<div class="table-card">
+  <p-table
+    [value]="transactions()"
+    class="dark-table"
+    [tableStyle]="{ 'min-width': '100%' }"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th (click)="onSort('date')" class="sortable-col">
+          Date
+          <i
+            class="fa-solid"
+            [class.fa-sort-up]="sortField() === 'date' && sortDir() === 'asc'"
+            [class.fa-sort-down]="sortField() === 'date' && sortDir() === 'desc'"
+            [class.fa-sort]="sortField() !== 'date'"
+          >
+          </i>
+        </th>
+        <th>Type</th>
+        <th (click)="onSort('amount')" class="sortable-col">
+          Amount
+          <i
+            class="fa-solid"
+            [class.fa-sort-up]="sortField() === 'amount' && sortDir() === 'asc'"
+            [class.fa-sort-down]="sortField() === 'amount' && sortDir() === 'desc'"
+            [class.fa-sort]="sortField() !== 'amount'"
+          >
+          </i>
+        </th>
+        <th>Merchant</th>
+        <th>Category</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-t>
+      <tr>
+        <td class="date-cell">{{ t.date | txDate }}</td>
+        <td>
+          <span class="type-badge" [class]="t.type.toLowerCase()">
+            {{ t.type }}
+          </span>
+        </td>
+        <td class="amount-cell" [class]="t.type.toLowerCase()">
+          {{ t | txAmount }}
+        </td>
+        <td class="merchant-cell">{{ t.merchant }}</td>
+        <td>
+          <span class="cat-badge">{{ t.category }}</span>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="5" class="empty-row">
+          <i class="fa-solid fa-inbox"></i>
+          <span>No transactions found</span>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  @if (totalRecords() > 0) {
+    <app-pagination 
+      [totalRecords]="totalRecords()" 
+      [rows]="rows()" 
+      [page]="page()" 
+      (pageChange)="onPageChange($event)"
+      (rowsChange)="onRowsChange($event)">
+    </app-pagination>
+  }
+</div>

@@ -1,0 +1,127 @@
+$surface:     var(--bg-main, #12151f);
+$border:      rgba(255, 255, 255, 0.06);
+$text-primary:var(--text-light, #f1f5f9);
+$text-muted:  var(--text-muted, rgba(255, 255, 255, 0.35));
+$indigo:      var(--primary-pink, #6366f1);
+$indigo-soft: rgba(250, 193, 217, 0.1);
+$red-soft:    rgba(248, 113, 113, 0.12);
+$green-soft:  rgba(52, 211, 153, 0.12);
+
+.table-card {
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+:host ::ng-deep .dark-table {
+  background: transparent !important;
+
+  .p-datatable-thead > tr > th {
+    background: transparent !important;
+    color: $text-muted;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-color: rgba(255, 255, 255, 0.05);
+    padding: 10px 16px;
+  }
+
+  .p-datatable-tbody > tr {
+    background: transparent !important;
+    
+    > td {
+      background: transparent !important;
+      border-color: rgba(255, 255, 255, 0.03);
+      padding: 12px 16px;
+      font-size: 0.82rem;
+      color: #cbd5e1;
+    }
+
+    &:hover > td {
+      background: rgba(255, 255, 255, 0.02) !important;
+    }
+  }
+
+  .p-paginator {
+    background: transparent !important;
+    border-top: 1px solid $border;
+    color: $text-muted;
+    font-size: 0.78rem;
+    padding: 10px 16px;
+  }
+}
+
+.sortable-col {
+  cursor: pointer;
+  user-select: none;
+
+  .fa-solid {
+    margin-left: 6px;
+    font-size: 0.75rem;
+    color: var(--primary-pink);
+  }
+}
+
+.date-cell {
+  color: $text-muted;
+  font-size: 0.78rem;
+}
+
+.merchant-cell {
+  font-weight: 600;
+  color: #e2e8f0;
+}
+
+.amount-cell {
+  font-weight: 600;
+
+  &.debit  { color: #f87171; }
+  &.credit { color: #34d399; }
+}
+
+.type-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+
+  &.debit {
+    background: $red-soft;
+    color: #f87171;
+    border: 1px solid rgba(248, 113, 113, 0.2);
+  }
+
+  &.credit {
+    background: $green-soft;
+    color: #34d399;
+    border: 1px solid rgba(52, 211, 153, 0.2);
+  }
+}
+
+.cat-badge {
+  font-size: 0.65rem;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 20px;
+  background: rgba(250, 193, 217, 0.12);
+  color: var(--primary-pink);
+  border: 1px solid rgba(250, 193, 217, 0.2);
+}
+
+.empty-row {
+  text-align: center;
+  padding: 3rem !important;
+  color: $text-muted;
+  font-size: 0.85rem;
+
+  .fa-solid {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: 8px;
+    opacity: 0.3;
+  }
+}

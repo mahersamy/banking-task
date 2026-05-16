@@ -39,6 +39,7 @@
     "@fortawesome/free-regular-svg-icons": "^7.2.0",
     "@fortawesome/free-solid-svg-icons": "^7.2.0",
     "@primeuix/themes": "^2.0.3",
+    "@tanstack/angular-query-experimental": "^5.100.10",
     "bootstrap": "^5.3.8",
     "express": "^5.1.0",
     "ngx-csv": "^0.3.2",

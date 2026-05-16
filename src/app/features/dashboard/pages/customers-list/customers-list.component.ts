@@ -12,13 +12,9 @@ import { SegmentBadgeComponent } from '../../components/segment-badge/segment-ba
   templateUrl: './customers-list.component.html',
   styleUrl: './customers-list.component.scss'
 })
-export class CustomersListComponent implements OnInit {
+export class CustomersListComponent {
   readonly facade = inject(DashboardFacade);
   private readonly router = inject(Router);
-
-  ngOnInit(): void {
-    this.facade.loadCustomers();
-  }
 
   onSelectCustomer(customer: Customer): void {
     this.router.navigate(['/dashboard/customers', customer.CIF]);

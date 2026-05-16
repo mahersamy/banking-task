@@ -8,6 +8,7 @@ import { DashboardFacade } from '../../dashboard/data/dashboard.facade';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { Transaction, TransactionFilter, SortField, SortDirection, cardType } from './models/transaction.model';
 import { v4 as uuidv4 } from 'uuid';
+import { formatDateToYYYYMMDD } from '../../../core/utils/date.util';
 
 @Injectable({ providedIn: 'root' })
 export class TransactionsFacade {
@@ -33,22 +34,13 @@ export class TransactionsFacade {
 
     const f = this.state.filter();
 
-    // Helper to extract YYYY-MM-DD local string from Date object
-    const toDateStr = (d: Date | string) => {
-      if (typeof d === 'string') return d;
-      const y = d.getFullYear();
-      const m = String(d.getMonth() + 1).padStart(2, '0');
-      const day = String(d.getDate()).padStart(2, '0');
-      return `${y}-${m}-${day}`;
-    };
-
     // Filter
     if (f.dateFrom) {
-      const fromStr = toDateStr(f.dateFrom);
+      const fromStr = formatDateToYYYYMMDD(f.dateFrom);
       list = list.filter(t => t.date >= fromStr);
     }
     if (f.dateTo) {
-      const toStr = toDateStr(f.dateTo);
+      const toStr = formatDateToYYYYMMDD(f.dateTo);
       list = list.filter(t => t.date <= toStr);
     }
     if (f.type) list = list.filter(t => t.type === f.type);
@@ -145,9 +137,7 @@ export class TransactionsFacade {
 
     // Simulate API delay to show loading state
     setTimeout(() => {
-      const dateStr = (dto.date as any) instanceof Date
-        ? (dto.date as any).toISOString().split('T')[0]
-        : dto.date;
+      const dateStr = formatDateToYYYYMMDD(dto.date);
 
       const newTransaction: Transaction = {
         id: `TRN_${uuidv4()}`,   // Business Rule 3.4 — client-side ID
@@ -165,7 +155,7 @@ export class TransactionsFacade {
 
       this.state.addTransaction(newTransaction);
       this.state.setLoading(false);
-      this.resetFilter(); // Clear filters so the new transaction is immediately visible
+      this.resetFilter();
       onSuccess?.();
     }, 800);
   }

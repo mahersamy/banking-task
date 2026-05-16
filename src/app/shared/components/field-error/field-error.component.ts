@@ -1,6 +1,6 @@
 import { Component, input } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
-import { FieldErrorMessages } from '../interfaces/error-messages.interface';
+import { FieldErrorMessages } from './interfaces/error-messages.interface';
 import { CommonModule } from '@angular/common';
 
 @Component({

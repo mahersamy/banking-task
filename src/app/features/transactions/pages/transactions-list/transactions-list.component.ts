@@ -7,13 +7,14 @@ import { TransactionsFacade } from '../../data/transactions.facade';
 import { SortField, SortDirection } from '../../data/models/transaction.model';
 
 // PrimeNG
-import { TableModule } from 'primeng/table';
 import { CardModule } from 'primeng/card';
 import { DatePickerModule } from 'primeng/datepicker';
 import { SelectModule } from 'primeng/select';
 import { ButtonModule } from 'primeng/button';
 import { exportToCsv } from '../../../../core/utils/export-csv.util';
-import { PaginationComponent } from '../../../../shared/components/pagination/pagination.component';
+import { TransactionTableComponent } from '../../components/transaction-table/transaction-table.component';
+import { CompactNumberPipe } from '../../../../shared/pipes/compact-number.pipe';
+import { TxDatePipe } from '../../../../shared/pipes/tx-date.pipe';
 
 @Component({
   selector: 'app-transactions-list',
@@ -22,12 +23,13 @@ import { PaginationComponent } from '../../../../shared/components/pagination/pa
     CommonModule,
     RouterModule,
     ReactiveFormsModule,
-    TableModule,
+    TransactionTableComponent,
     CardModule,
     DatePickerModule,
     SelectModule,
     ButtonModule,
-    PaginationComponent
+    CompactNumberPipe,
+    TxDatePipe
   ],
   templateUrl: './transactions-list.component.html',
   styleUrl: './transaction-list.component.scss'
@@ -38,6 +40,7 @@ export class TransactionsListComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
+  readonly d = new Date();
 
   filterForm = this.fb.group({
     dateFrom: [null],

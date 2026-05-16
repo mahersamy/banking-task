@@ -1,11 +1,13 @@
 import { Component, input, inject, computed, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TransactionsFacade } from '../../../transactions/data/transactions.facade';
+import { TxAmountPipe } from '../../../../shared/pipes/tx-amount.pipe';
+import { TxDatePipe } from '../../../../shared/pipes/tx-date.pipe';
 
 @Component({
   selector: 'app-mini-statement',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TxAmountPipe, TxDatePipe],
   templateUrl: './mini-statement.component.html',
   styleUrl: './mini-statement.component.scss',
 })
