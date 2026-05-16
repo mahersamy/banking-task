@@ -1,4 +1,4 @@
-# Antigravity Banking Portal
+# Banking Portal
 
 > Angular front-end technical task — Banking Sector  
 > Built with Angular 21, PrimeNG, TanStack Query, RxJS & Signals
