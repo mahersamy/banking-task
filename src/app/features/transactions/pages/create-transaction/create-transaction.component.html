@@ -1,7 +1,7 @@
 <div class="create-page">
   <div class="page-header">
     <button class="btn-back" (click)="cancel()">
-      <i class="pi pi-arrow-left"></i>
+      <i class="fa-solid fa-arrow-left"></i>
     </button>
     <div>
       <h2 class="page-title">New Transaction</h2>
@@ -9,7 +9,7 @@
     </div>
   </div>
 
-  <p-card styleClass="form-card">
+  <p-card class="form-card">
     <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
       <div class="form-grid">
         <!-- Transaction Type -->

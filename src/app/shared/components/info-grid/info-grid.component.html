@@ -1,0 +1,11 @@
+<div class="info-grid">
+  @for (item of items(); track item.label) {
+    <div class="info-item">
+      <span class="info-label">
+        <i [class]="item.icon"></i>
+        {{ item.label }}
+      </span>
+      <span class="info-value">{{ item.value ?? '—' }}</span>
+    </div>
+  }
+</div>

@@ -6,6 +6,9 @@ import { DashboardFacade } from '../../data/dashboard.facade';
 import { SegmentBadgeComponent } from '../../components/segment-badge/segment-badge.component';
 import { AccountCardComponent } from '../../components/account-card/account-card.component';
 import { MiniStatementComponent } from '../../components/mini-statement/mini-statement.component';
+import { InfoGridComponent } from '../../../../shared/components/info-grid/info-grid.component';
+import { InfoItem } from '../../../../shared/components/info-grid/interfaces/info-item.interfaces';
+import { computed } from '@angular/core';
 
 @Component({
   selector: 'app-customer-detail',
@@ -14,7 +17,8 @@ import { MiniStatementComponent } from '../../components/mini-statement/mini-sta
     CommonModule,
     SegmentBadgeComponent,
     AccountCardComponent,
-    MiniStatementComponent
+    MiniStatementComponent,
+    InfoGridComponent
   ],
   templateUrl: './customer-detail.component.html',
   styleUrl: './customer-detail.component.scss'
@@ -32,6 +36,17 @@ export class CustomerDetailComponent implements OnInit {
 
   readonly loading = this.facade.isLoading;
   readonly error = this.facade.error;
+
+  readonly infoItems = computed<InfoItem[]>(() => {
+    const c = this.customer();
+    if (!c) return [];
+    return [
+      { label: 'National ID', icon: 'fa-solid fa-id-card', value: c.nationalId },
+      { label: 'Segment', icon: 'fa-solid fa-layer-group', value: c.segment },
+      { label: 'Email', icon: 'fa-solid fa-envelope', value: c.email },
+      { label: 'Phone', icon: 'fa-solid fa-phone', value: c.phone },
+    ];
+  });
 
   ngOnInit(): void {
     const cif = this.route.snapshot.paramMap.get('id');

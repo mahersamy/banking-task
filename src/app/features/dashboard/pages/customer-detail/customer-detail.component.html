@@ -44,24 +44,7 @@
     </div>
 
     <!-- Customer Info Grid -->
-    <div class="info-grid">
-      <div class="info-item">
-        <span class="info-label"><i class="fa-solid fa-id-card"></i>National ID</span>
-        <span class="info-value">{{ customer.nationalId }}</span>
-      </div>
-      <div class="info-item">
-        <span class="info-label"><i class="fa-solid fa-layer-group"></i>Segment</span>
-        <span class="info-value">{{ customer.segment }}</span>
-      </div>
-      <div class="info-item">
-        <span class="info-label"><i class="fa-solid fa-envelope"></i>Email</span>
-        <span class="info-value">{{ customer.email }}</span>
-      </div>
-      <div class="info-item">
-        <span class="info-label"><i class="fa-solid fa-phone"></i>Phone</span>
-        <span class="info-value">{{ customer.phone }}</span>
-      </div>
-    </div>
+    <app-info-grid [items]="infoItems()"></app-info-grid>
 
     <!-- Accounts Section -->
     <div class="accounts-section">

@@ -14,7 +14,6 @@ import { ButtonModule } from 'primeng/button';
 import { exportToCsv } from '../../../../core/utils/export-csv.util';
 import { TransactionTableComponent } from '../../components/transaction-table/transaction-table.component';
 import { CompactNumberPipe } from '../../../../shared/pipes/compact-number.pipe';
-import { TxDatePipe } from '../../../../shared/pipes/tx-date.pipe';
 
 @Component({
   selector: 'app-transactions-list',
@@ -29,7 +28,6 @@ import { TxDatePipe } from '../../../../shared/pipes/tx-date.pipe';
     SelectModule,
     ButtonModule,
     CompactNumberPipe,
-    TxDatePipe
   ],
   templateUrl: './transactions-list.component.html',
   styleUrl: './transaction-list.component.scss'
