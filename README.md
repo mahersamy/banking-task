@@ -276,7 +276,7 @@ All errors display inline immediately on field touch via the reusable `FieldErro
 
 2. **No localStorage persistence for transactions** — the task marks this optional. Transactions created during a session are held in-memory (Angular Signals state) and reset on page refresh. This was omitted in favour of demonstrating clean signal-based reactivity. Adding it would require one `StorageService.set` call in `TransactionsState.addTransaction` and a `loadAll` fallback check.
 
-3. **Monthly insights use the current calendar month** — insights on the transactions page show debit total, credit total, and top spending category for the current month only. Because the bundled mock data is dated December 2025, the insights panel will show zero until a new transaction is created (or the mock dates are updated). This is expected behaviour given static fixtures.
+3. **Monthly insights use the current calendar month** — insights on the transactions page show debit total, credit total, and top spending category for the current month only. Because the bundled mock data is dated December 2025, 
 
 4. **Transaction T9101 uses `accountId: A2001`** — this ID does not exist in `accounts.json`. The transaction is intentionally excluded from all account views as a result. A real backend would enforce referential integrity.
 
