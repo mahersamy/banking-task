@@ -65,7 +65,6 @@ export class PaginationComponent {
   }
 
   onRowsChange(newValue: number): void {
-    console.log('Rows changed to:', newValue);
     if (newValue) {
       this.rowsChange.emit(newValue);
     }

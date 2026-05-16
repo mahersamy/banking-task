@@ -29,8 +29,6 @@ export function exceedsBalanceValidator(getBalance: () => number): ValidatorFn {
     const type = form.get('type')?.value;
     const amount = parseFloat(control.value);
     const balance = getBalance();
-    console.log('Validator Check:', { type, amount, balance });
-
     if (type === cardType.DEBIT && amount > balance) {
       return { exceedsBalance: true };
     }
